@@ -81,7 +81,7 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "M-SPC")   'cycle-spacing)
 (global-set-key (kbd "C-c r")   'rename-buffer-and-file)
 (global-set-key (kbd "C-c k")   'kill-other-buffers)
-
+(global-set-key (kbd "<f11>")   'toggle-frame-maximized)
 
 (define-key isearch-mode-map (kbd "<backspace>")
   #'isearch-delete-something)
