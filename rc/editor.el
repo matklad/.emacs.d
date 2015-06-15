@@ -141,8 +141,8 @@
   (global-set-key (kbd "C-x b")   'helm-for-files)
   (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
   (setq helm-for-files-preferred-list
-        '(helm-source-projectile-files-list
-          helm-source-buffers-list
+        '(helm-source-buffers-list
+          helm-source-projectile-files-list
           helm-source-recentf
           helm-source-bookmarks
           helm-source-file-cache
