@@ -84,7 +84,8 @@
 (use-package cider
   :ensure t
   :config
-  (define-key cider-mode-map (kbd "C-M-i") 'company-complete))
+  (define-key cider-mode-map (kbd "C-M-i") 'company-complete)
+  (setq cider-stacktrace-default-filters '(java repl tooling dup)))
 
 
 ;; C/C++
@@ -152,7 +153,14 @@
   :ensure t
   :config
   (setq web-mode-markup-indent-offset 2)
-  (add-hook 'sgml-mode-hook 'emmet-mode))
+  (add-hook 'sgml-mode-hook 'emmet-mode)
+  (add-hook 'web-mode-hook 'emmet-mode))
 
 (use-package web-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+  (setq web-mode-engines-alist
+        '(("django"    . "\\.html\\'")))
+  (sp-local-pair 'web-mode "{{" "}}")
+  (sp-local-pair 'web-mode "{%" "%}" :insert "C-c b"))

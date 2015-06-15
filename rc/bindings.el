@@ -74,8 +74,6 @@ Doesn't mess with special buffers."
 
 
 (global-set-key (kbd "M-o")     'smart-open-line)
-(global-set-key (kbd "C-x b")   'helm-for-files)
-(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
 (global-set-key (kbd "C-a")     'smart-move-beginning-of-line)
 (global-set-key (kbd "M-/")     'hippie-expand)
 (global-set-key (kbd "M-SPC")   'cycle-spacing)

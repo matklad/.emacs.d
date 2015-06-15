@@ -137,8 +137,17 @@
   (setq helm-split-window-in-side-p t)
   (global-set-key (kbd "M-x") 'helm-M-x)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-  (global-set-key (kbd "C-x b") 'helm-mini)
   (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-x b")   'helm-for-files)
+  (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+  (setq helm-for-files-preferred-list
+        '(helm-source-projectile-files-list
+          helm-source-buffers-list
+          helm-source-recentf
+          helm-source-bookmarks
+          helm-source-file-cache
+          helm-source-files-in-current-dir
+          helm-source-locate))
   (helm-mode))
 
 
