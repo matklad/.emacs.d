@@ -29,13 +29,27 @@
   :config
   (add-to-list 'company-backends 'company-anaconda))
 
+(use-package f
+  :ensure t)
+
+(use-package s
+  :ensure t)
+
+
+(defun pyenv-from-file ()
+  (let ((current-file (buffer-file-name))
+        (file-name ".python-version"))
+    (when current-file
+      (let* ((conf-dir (locate-dominating-file current-file file-name))
+             (conf-file (concat conf-dir file-name)))
+        (pyenv-mode-set
+         (s-trim (f-read conf-file)))))))
+
 (use-package pyenv-mode
   :ensure t
   :config
   (pyenv-mode)
-  (defun projectile-pyenv-mode-set ()
-    (pyenv-mode-set (projectile-project-name)))
-  (add-hook 'projectile-switch-project-hook 'projectile-pyenv-mode-set))
+  (add-hook 'python-mode-hook 'pyenv-from-file))
 
 (defun electric-python-hook ()
   (setq-local electric-layout-rules
