@@ -32,10 +32,6 @@
 (use-package f
   :ensure t)
 
-(use-package s
-  :ensure t)
-
-
 (defun pyenv-from-file ()
   (let ((current-file (buffer-file-name))
         (file-name ".python-version"))
@@ -43,7 +39,7 @@
       (let* ((conf-dir (locate-dominating-file current-file file-name))
              (conf-file (concat conf-dir file-name)))
         (pyenv-mode-set
-         (s-trim (f-read conf-file)))))))
+         (string-trim (f-read conf-file)))))))
 
 (use-package pyenv-mode
   :ensure t
