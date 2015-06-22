@@ -17,7 +17,7 @@
   (load (local-file-name file-name)))
 
 (setq gc-cons-threshold 50000000)
-(setq shell-file-name "/usr/bin/bash")
+(setq shell-file-name "/usr/bin/sh")
 
 (setq load-prefer-newer t)
 (load-local "core/packages.el")
