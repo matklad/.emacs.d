@@ -174,3 +174,8 @@
         '(("django"    . "\\.html\\'")))
   (sp-local-pair 'web-mode "{{" "}}")
   (sp-local-pair 'web-mode "{%" "%}" :insert "C-c b"))
+
+(use-package coffee-mode
+  :ensure t
+  :config
+  (setq-default coffee-tab-width 2))
