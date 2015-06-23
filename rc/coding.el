@@ -159,6 +159,9 @@
 
 ;; Web
 
+(use-package markdown-mode
+  :ensure t)
+
 (use-package emmet-mode
   :ensure t
   :config
