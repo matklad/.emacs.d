@@ -236,3 +236,6 @@
   :config
   (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
   (setq ace-jump-mode-gray-background nil))
+
+(use-package buffer-move
+  :ensure t)
