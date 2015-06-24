@@ -79,11 +79,13 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-
 (defun my-clojure-hook ()
   (enable-paredit-mode)
   (rainbow-delimiters-mode)
-  (setq company-idle-delay 0))
+  (setq company-idle-delay 0)
+  (clj-refactor-mode t)
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
+
 
 (use-package clojure-mode
   :ensure t
@@ -91,8 +93,13 @@
   (add-hook 'clojure-mode-hook 'my-clojure-hook))
 
 
+(use-package clj-refactor
+  :ensure t)
+
+
 (use-package cider
   :ensure t
+  :pin melpa-stable
   :config
   (define-key cider-mode-map (kbd "C-M-i") 'company-complete)
   (setq cider-stacktrace-default-filters '(java repl tooling dup)))
