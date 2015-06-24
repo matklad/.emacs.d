@@ -239,3 +239,13 @@
 
 (use-package buffer-move
   :ensure t)
+
+(defun ace-window-golden-rato (arg)
+    (interactive "p")
+  (ace-window arg)
+  (golden-ratio))
+
+(use-package ace-window
+  :ensure t
+  :config
+  (global-set-key (kbd "C-x o") 'ace-window-golden-rato))
