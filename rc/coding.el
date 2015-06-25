@@ -167,7 +167,9 @@
 ;; Web
 
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
 (use-package emmet-mode
   :ensure t
