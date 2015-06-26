@@ -158,7 +158,8 @@
   :ensure t
   :diminish projectile-mode
   :config
-  (setq projectile-keymap-prefix (kbd "C-c p")
+  (setq projectile-use-git-grep t
+        projectile-keymap-prefix (kbd "C-c p")
         projectile-cache-file (local-file-name "cache/projectile.cache")
         projectile-known-projects-file (local-file-name "store/projectile-bookmarks.eld"))
   (projectile-global-mode))

@@ -42,6 +42,17 @@
   (isearch-update))
 
 
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (when (y-or-n-p (format "Are you sure you want to delete %s? " filename))
+        (delete-file filename)
+        (message "Deleted file %s" filename)
+        (kill-buffer)))))
+
+
 (defun rename-buffer-and-file ()
   "Rename current buffer and if the buffer is visiting a file, rename it too."
   (interactive)
@@ -55,6 +66,7 @@
           (rename-file filename new-name t)
           (set-visited-file-name new-name t t)))))))
 
+
 (defun kill-other-buffers ()
   "Kill all buffers but the current one.
 Doesn't mess with special buffers."
@@ -64,6 +76,7 @@ Doesn't mess with special buffers."
      (-filter #'buffer-file-name)
      (--remove (eql (current-buffer) it)))
    #'kill-buffer))
+
 
 (defun switch-theme (name)
   (interactive
@@ -114,6 +127,7 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "M-/")     'hippie-expand)
 (global-set-key (kbd "M-SPC")   'cycle-spacing)
 (global-set-key (kbd "C-c r")   'rename-buffer-and-file)
+(global-set-key (kbd "C-c D")   'delete-file-and-buffer)
 (global-set-key (kbd "C-c k")   'kill-other-buffers)
 (global-set-key (kbd "<f11>")   'toggle-frame-maximized)
 (global-set-key (kbd "M-s")     'sp-splice-sexp)
