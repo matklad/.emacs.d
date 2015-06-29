@@ -97,6 +97,9 @@
   :ensure t)
 
 
+(use-package kibit-mode
+  :ensure t)
+
 (use-package cider
   :ensure t
   :pin melpa-stable
