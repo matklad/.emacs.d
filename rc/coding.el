@@ -97,10 +97,6 @@
   :ensure t)
 
 
-(use-package kibit-mode
-  :ensure t)
-
-
 (defun align-schema ()
   "Nicely aligns :-"
   (interactive)
