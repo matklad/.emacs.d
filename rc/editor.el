@@ -105,7 +105,8 @@
   (global-company-mode)
   (define-key company-mode-map (kbd "C-M-i") 'company-complete)
   (setq company-require-match "Off"
-        company-clang-arguments '("-std=c++11")))
+        company-clang-arguments '("-std=c++11")
+        company-show-numbers t))
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev
                                          try-expand-dabbrev-all-buffers

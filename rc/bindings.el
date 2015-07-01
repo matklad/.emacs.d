@@ -60,11 +60,8 @@
     (if (not (and filename (file-exists-p filename)))
         (rename-buffer (read-from-minibuffer "New name: " (buffer-name)))
       (let ((new-name (read-file-name "New name: " filename)))
-        (cond
-         ((vc-backend filename) (vc-rename-file filename new-name))
-         (t
-          (rename-file filename new-name t)
-          (set-visited-file-name new-name t t)))))))
+        (rename-file filename new-name t)
+        (set-visited-file-name new-name t t)))))
 
 
 (defun kill-other-buffers ()

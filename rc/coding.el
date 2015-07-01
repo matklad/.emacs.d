@@ -100,12 +100,34 @@
 (use-package kibit-mode
   :ensure t)
 
+
+(defun align-schema ()
+  "Nicely aligns :-"
+  (interactive)
+  (save-excursion
+    (let ((beg (search-backward "["))
+          (end (search-forward "]")))
+      (align-regexp beg end "\\(\\s-*\\):"))))
+
+
 (use-package cider
   :ensure t
   :pin melpa-stable
   :config
   (define-key cider-mode-map (kbd "C-M-i") 'company-complete)
-  (setq cider-stacktrace-default-filters '(java repl tooling dup)))
+  (define-key cider-mode-map (kbd "C-c :") 'align-schema)
+  (setq cider-stacktrace-default-filters '(java repl tooling dup)
+        cider-prompt-for-symbol nil)
+  (put-clojure-indent 'match 1)
+  (put-clojure-indent 'forward-error 1))
+
+
+(defun cljs-repl ()
+  "activates clojurescript repl in CIDER"
+  (interactive)
+  (nrepl-sync-request:eval "(require '[cemerick.piggieback :as piggieback])
+    (require '[cljs.repl.node :as node])
+    (piggieback/cljs-repl (node/repl-env))"))
 
 
 ;; C/C++
