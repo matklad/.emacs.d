@@ -177,7 +177,8 @@
           helm-source-file-cache
           helm-source-files-in-current-dir
           helm-source-locate))
-  (helm-projectile-on))
+  (helm-projectile-on)
+  (define-key projectile-command-map (kbd "s g") 'projectile-grep))
 
 
 (use-package undo-tree
