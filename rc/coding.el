@@ -116,6 +116,7 @@
         cider-prompt-for-symbol nil)
   (put-clojure-indent 'match 1)
   (put-clojure-indent 'forward-error 1)
+  (put-clojure-indent 'try-> 1)
   (add-hook 'cider-mode-hook #'eldoc-mode)
   (add-hook 'cider-repl-mode-hook #'paredit-mode))
 

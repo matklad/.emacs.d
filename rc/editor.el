@@ -202,6 +202,7 @@
 
 (use-package magit
   :ensure t
+  :pin melpa-stable
   :bind ("M-k" . magit-status)
   :init
   (setq magit-last-seen-setup-instructions "1.4.0"))
