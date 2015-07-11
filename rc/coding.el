@@ -215,3 +215,13 @@
   :ensure t
   :config
   (setq-default coffee-tab-width 2))
+
+;; Rust
+
+(use-package rust-mode
+  :ensure t)
+
+(use-package flycheck-rust
+  :ensure t
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
