@@ -20,9 +20,9 @@
                                 indentation space-after-tab)
         whitespace-line-column 80))
 
-(setq next-line-add-newlines nil
-      require-final-newline t
-      kill-whole-line t)
+(setq-default next-line-add-newlines nil
+              require-final-newline t
+              kill-whole-line t)
 
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))

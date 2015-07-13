@@ -120,6 +120,17 @@
   (add-hook 'cider-mode-hook #'eldoc-mode)
   (add-hook 'cider-repl-mode-hook #'paredit-mode))
 
+(add-hook 'clojure-mode-hook
+          '(lambda ()
+             (font-lock-add-keywords
+                nil
+                '(("(\\(try->\\)\\s-+"
+                   (1 font-lock-keyword-face))))
+             (font-lock-add-keywords
+                nil
+                '(("(\\(catch->\\)\\s-+"
+                   (1 font-lock-keyword-face))))))
+
 
 (defun cljs-repl ()
   "activates clojurescript repl in CIDER"
