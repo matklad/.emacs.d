@@ -80,6 +80,7 @@ Doesn't mess with special buffers."
    (list
     (intern (completing-read "Load custom theme: "
                              (mapcar 'symbol-name (custom-available-themes))))))
+  (mapc #'disable-theme custom-enabled-themes)
   (load-theme name t))
 
 ;;; from mastering emacs

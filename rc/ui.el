@@ -1,13 +1,11 @@
 (require 'use-package)
 
 (use-package zenburn-theme
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package base16-theme
   :ensure t)
-
-(load-theme 'zenburn t)
-
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -21,7 +19,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (add-to-list 'default-frame-alist '(font . "Ubuntu Mono-12"))
-(add-to-list 'default-frame-alist '(cursor-color . "#FFFFFF"))
+(add-hook 'after-make-frame-functions '(lambda (frame)
+                                         (load-theme 'leuven t)) t)
 
 (use-package golden-ratio
   :ensure t
