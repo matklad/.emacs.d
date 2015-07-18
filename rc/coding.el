@@ -230,7 +230,14 @@
 ;; Rust
 
 (use-package rust-mode
-  :ensure t)
+  :ensure t
+  :bind ("C-c C-c" . recompile)
+  :config
+  (defun my-rust-mode-hook ()
+    (set (make-local-variable 'compile-command)
+         "cargo build")
+    (setq compilation-auto-jump-to-first-error 't))
+  (add-hook 'rust-mode-hook 'my-rust-mode-hook))
 
 (use-package flycheck-rust
   :ensure t
