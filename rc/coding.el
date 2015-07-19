@@ -235,8 +235,12 @@
   :config
   (defun my-rust-mode-hook ()
     (set (make-local-variable 'compile-command)
-         "cargo build")
-    (setq compilation-auto-jump-to-first-error 't))
+         "cargo run")
+    (whitespace-mode 0)
+    (setq compilation-auto-jump-to-first-error 't
+          whitespace-line-column 99
+          fill-column 99)
+    (whitespace-mode 1))
   (add-hook 'rust-mode-hook 'my-rust-mode-hook))
 
 (use-package flycheck-rust
