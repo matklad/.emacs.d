@@ -265,3 +265,6 @@
   (global-set-key (kbd "C-x o") 'ace-window-golden-rato))
 
 (winner-mode t)
+
+(use-package god-mode
+  :ensure t)
