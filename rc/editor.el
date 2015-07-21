@@ -245,11 +245,9 @@
   (add-hook 'text-mode-hook '(lambda () (flyspell-mode t))))
 
 
-(use-package ace-jump-mode
+(use-package avy
   :ensure t
-  :config
-  (global-set-key (kbd "C-;") 'ace-jump-mode)
-  (setq ace-jump-mode-gray-background nil))
+  :bind ("C-;" . avy-goto-word-1))
 
 (use-package buffer-move
   :ensure t)
@@ -262,7 +260,7 @@
 (use-package ace-window
   :ensure t
   :config
-  (global-set-key (kbd "C-x o") 'ace-window-golden-rato))
+  :bind ("C-x o". ace-window-golden-rato))
 
 (winner-mode t)
 
