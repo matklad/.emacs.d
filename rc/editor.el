@@ -264,5 +264,9 @@
 
 (winner-mode t)
 
+
 (use-package god-mode
+  :ensure t)
+
+(use-package rainbow-mode
   :ensure t)
