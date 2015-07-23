@@ -28,7 +28,7 @@
 
 (add-to-list 'default-frame-alist '(font . "Ubuntu Mono-12"))
 (add-hook 'after-make-frame-functions '(lambda (frame)
-                                         (switch-theme 'leuven t)) t)
+                                         (load-theme 'leuven t)) t)
 
 (use-package golden-ratio
   :ensure t
