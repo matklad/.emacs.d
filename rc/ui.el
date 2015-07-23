@@ -7,6 +7,14 @@
 (use-package base16-theme
   :ensure t)
 
+(defun switch-theme (name)
+  (interactive
+   (list
+    (intern (completing-read "Load custom theme: "
+                             (mapcar 'symbol-name (custom-available-themes))))))
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme name t))
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -20,7 +28,7 @@
 
 (add-to-list 'default-frame-alist '(font . "Ubuntu Mono-12"))
 (add-hook 'after-make-frame-functions '(lambda (frame)
-                                         (load-theme 'leuven t)) t)
+                                         (switch-theme 'leuven t)) t)
 
 (use-package golden-ratio
   :ensure t
