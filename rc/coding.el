@@ -227,6 +227,14 @@
   :config
   (setq-default coffee-tab-width 2))
 
+(use-package json-mode
+  :ensure t)
+
+(use-package js2-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
 ;; Rust
 
 (use-package rust-mode
