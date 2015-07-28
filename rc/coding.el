@@ -245,6 +245,10 @@
 (font-lock-add-keywords 'js-mode
   '(("constructor" . font-lock-keyword-face)))
 
+(add-hook 'js-mode-hook
+          (lambda ()
+            (subword-mode 1)))
+
 ;; Rust
 
 (use-package rust-mode
