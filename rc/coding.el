@@ -232,8 +232,10 @@
 
 (use-package js2-mode
   :ensure t
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+  ;; Not working well with ES6
+  ;; :config
+  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  )
 
 ;; Rust
 
