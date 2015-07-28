@@ -249,6 +249,14 @@
           (lambda ()
             (subword-mode 1)))
 
+(require 'ansi-color)
+(defun mocha-colorize-compilation-buffer ()
+  "Colorize compilation buffer."
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+(add-hook 'compilation-filter-hook 'mocha-colorize-compilation-buffer)
+
 ;; Rust
 
 (use-package rust-mode
