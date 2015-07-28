@@ -270,6 +270,6 @@
 
 (use-package rainbow-mode
   :ensure t
-  :diminish t
+  :diminish rainbow-mode
   :config
   (add-hook 'prog-mode-hook 'rainbow-mode))
