@@ -242,6 +242,9 @@
   ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
   )
 
+(font-lock-add-keywords 'js-mode
+  '(("constructor" . font-lock-keyword-face)))
+
 ;; Rust
 
 (use-package rust-mode
