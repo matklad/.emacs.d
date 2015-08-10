@@ -75,8 +75,6 @@ Doesn't mess with special buffers."
    #'kill-buffer))
 
 
-
-
 ;;; from mastering emacs
 (defun point-in-string-p (pt)
   "Returns t if PT is in a string"
@@ -114,6 +112,15 @@ Doesn't mess with special buffers."
       (insert replacement-char))))
 
 
+(defun smart-compile ()
+  "runs compile command based on current major mode."
+  (interactive)
+  (cond ((eq major-mode 'js-mode)
+         (progn
+           (save-some-buffers 1)
+           (compile "npm test")))))
+
+
 (global-set-key (kbd "M-o")     'smart-open-line)
 (global-set-key (kbd "C-a")     'smart-move-beginning-of-line)
 (global-set-key (kbd "M-/")     'hippie-expand)
@@ -124,6 +131,7 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "<f11>")   'toggle-frame-maximized)
 (global-set-key (kbd "M-s")     'sp-splice-sexp)
 (global-set-key (kbd "C-'")     'swap-quotes)
+(global-set-key (kbd "C-c C-c") 'smart-compile)
 
 (define-key isearch-mode-map (kbd "<backspace>")
   #'isearch-delete-something)
