@@ -15,6 +15,7 @@
                 flycheck-clang-language-standard "c++11")
   (global-flycheck-mode))
 
+(setq compilation-ask-about-save  nil)
 
 ;; Python
 
@@ -265,7 +266,7 @@
   :config
   (defun my-rust-mode-hook ()
     (set (make-local-variable 'compile-command)
-         "cargo run")
+         "cargo build")
     (whitespace-mode 0)
     (setq compilation-auto-jump-to-first-error 't
           whitespace-line-column 99

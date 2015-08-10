@@ -273,3 +273,10 @@
   :diminish rainbow-mode
   :config
   (add-hook 'prog-mode-hook 'rainbow-mode))
+
+(use-package neotree
+  :ensure t)
+
+
+(dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]))
+  (global-unset-key k))
