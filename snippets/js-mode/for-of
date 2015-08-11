@@ -3,6 +3,6 @@
 # key: of
 # binding: direct-keybinding
 # --
-for(const $1 of $2) {
+for (const $1 of $2) {
     $0
 }
