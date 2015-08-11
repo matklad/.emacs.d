@@ -115,10 +115,13 @@ Doesn't mess with special buffers."
 (defun smart-compile ()
   "runs compile command based on current major mode."
   (interactive)
-  (cond ((eq major-mode 'js-mode)
-         (progn
-           (save-some-buffers 1)
-           (compile "npm test")))))
+  (let ((cmd (cond ((eq major-mode 'js-mode) "npm test")
+
+                   ((eq major-mode 'rust-mode) "cargo build"))))
+    (progn
+      (print cmd)
+      (save-some-buffers 1)
+      (compile cmd))))
 
 
 (global-set-key (kbd "<f11>")   'toggle-frame-maximized)

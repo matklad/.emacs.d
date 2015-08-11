@@ -262,11 +262,8 @@
 
 (use-package rust-mode
   :ensure t
-  :bind ("C-c C-c" . recompile)
   :config
   (defun my-rust-mode-hook ()
-    (set (make-local-variable 'compile-command)
-         "cargo build")
     (whitespace-mode 0)
     (setq compilation-auto-jump-to-first-error 't
           whitespace-line-column 99
