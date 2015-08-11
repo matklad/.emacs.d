@@ -4,6 +4,10 @@
   :ensure t
   :defer t)
 
+(use-package solarized-theme
+  :ensure t
+  :defer t)
+
 (use-package base16-theme
   :ensure t)
 
