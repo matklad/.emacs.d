@@ -3,4 +3,4 @@
 # key: p
 # binding: direct-keybinding
 # --
-println!($0);
+println!("{:#?}", $0);

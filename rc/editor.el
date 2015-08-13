@@ -188,16 +188,13 @@
   (global-undo-tree-mode)
   (setq undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t
-        undo-tree-auto-save-history t)
+        undo-tree-auto-save-history t
+        undo-tree-history-directory-alist (quote (("." . "~/.emacs.d/cache/undo/"))))
   (defalias 'redo 'undo-tree-redo)
 
   (defadvice undo-tree-make-history-save-file-name
       (after undo-tree activate)
-    (setq ad-return-value (concat ad-return-value ".gz")))
-
-  (custom-set-variables
-   '(undo-tree-history-directory-alist
-     (quote (("." . "~/.emacs.d/cache/undo/"))))))
+    (setq ad-return-value (concat ad-return-value ".gz"))))
 
 
 (use-package magit
@@ -205,7 +202,8 @@
   :pin melpa-stable
   :bind ("M-k" . magit-status)
   :init
-  (setq magit-last-seen-setup-instructions "1.4.0"))
+  (setq magit-last-seen-setup-instructions "1.4.0"
+        magit-pull-arguments (quote ("--rebase"))))
 
 
 (use-package anzu
