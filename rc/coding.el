@@ -273,7 +273,14 @@
           whitespace-line-column 99
           fill-column 99)
     (whitespace-mode 1))
-  (add-hook 'rust-mode-hook 'my-rust-mode-hook))
+  (add-hook 'rust-mode-hook 'my-rust-mode-hook)
+  (sp-local-pair 'rust-mode "'" nil :actions nil))
+
+(use-package racer
+  :ensure t)
+
+(use-package company-racer
+  :ensure t)
 
 (use-package flycheck-rust
   :ensure t

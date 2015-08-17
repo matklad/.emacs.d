@@ -34,7 +34,7 @@
 (setq inhibit-startup-screen t)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(add-to-list 'default-frame-alist '(font . "Ubuntu Mono-12"))
+(add-to-list 'default-frame-alist '(font . "Source Code Pro-10"))
 (add-hook 'after-make-frame-functions '(lambda (frame)
                                          (load-theme my-theme t)) t)
 
