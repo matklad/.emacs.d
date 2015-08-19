@@ -80,9 +80,13 @@
 (use-package rainbow-delimiters
   :ensure t)
 
+(use-package paren-face
+  :ensure t
+  :config
+  (global-paren-face-mode))
+
 (defun my-clojure-hook ()
   (enable-paredit-mode)
-  (rainbow-delimiters-mode)
   (setq company-idle-delay 0)
   (clj-refactor-mode t)
   (cljr-add-keybindings-with-prefix "C-c C-m"))
