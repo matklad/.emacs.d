@@ -251,14 +251,14 @@
   :ensure t)
 
 (defun ace-window-golden-rato (arg)
-    (interactive "p")
+  (interactive "p")
   (ace-window arg)
   (golden-ratio))
 
 (use-package ace-window
   :ensure t
   :config
-  :bind ("C-x o". ace-window-golden-rato))
+  :bind ("C-x o" . ace-window-golden-rato))
 
 (winner-mode t)
 
@@ -266,14 +266,21 @@
 (use-package god-mode
   :ensure t)
 
+
 (use-package rainbow-mode
   :ensure t
   :diminish rainbow-mode
   :config
   (add-hook 'prog-mode-hook 'rainbow-mode))
 
+
 (use-package neotree
   :ensure t)
+
+
+(use-package shrink-whitespace
+  :ensure t
+  :bind ("M-SPC" . shrink-whitespace))
 
 
 (dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]))
