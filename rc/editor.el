@@ -32,6 +32,8 @@
 
 (global-auto-revert-mode t)
 
+(setq default-input-method 'russian-computer)
+
 
 (use-package uniquify
   :init
@@ -106,6 +108,7 @@
   (define-key company-mode-map (kbd "C-M-i") 'company-complete)
   (setq company-require-match "Off"
         company-clang-arguments '("-std=c++11")
+        company-idle-delay 0
         company-show-numbers t))
 
 (setq hippie-expand-try-functions-list '(try-expand-dabbrev

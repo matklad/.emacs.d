@@ -74,7 +74,7 @@
   (add-hook 'lisp-mode-hook             'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
   (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-  (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+  (add-hook 'racket-mode-hook           'enable-paredit-mode)
   (add-hook 'paredit-mode-hook '(lambda () (setq kill-whole-line nil))))
 
 (use-package rainbow-delimiters
@@ -84,6 +84,11 @@
   :ensure t
   :config
   (global-paren-face-mode))
+
+(use-package racket-mode
+  :config
+  (add-hook 'racket-mode-hook
+            'paren-face-mode))
 
 (defun my-clojure-hook ()
   (enable-paredit-mode)
