@@ -88,7 +88,9 @@
 (use-package racket-mode
   :config
   (add-hook 'racket-mode-hook
-            'paren-face-mode))
+            'paren-face-mode)
+  (sp-local-pair 'racket-mode "'" nil :actions nil)
+  (sp-local-pair 'racket-mode "`" nil :actions nil))
 
 (defun my-clojure-hook ()
   (enable-paredit-mode)
