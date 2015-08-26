@@ -135,6 +135,7 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "M-/")     'hippie-expand)
 (global-set-key (kbd "M-o")     'smart-open-line)
 (global-set-key (kbd "M-s")     'sp-splice-sexp)
+(global-set-key (kbd "C-c s")   'imenu)
 
 (define-key isearch-mode-map (kbd "<backspace>")
   #'isearch-delete-something)
