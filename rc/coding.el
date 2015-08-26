@@ -85,10 +85,15 @@
   :config
   (global-paren-face-mode))
 
+(defun my-racket-hook ()
+  (paren-face-mode)
+  (push '("lambda"  . ?λ) prettify-symbols-alist)
+  (prettify-symbols-mode))
+
 (use-package racket-mode
   :config
   (add-hook 'racket-mode-hook
-            'paren-face-mode)
+            'my-racket-hook)
   (sp-local-pair 'racket-mode "'" nil :actions nil)
   (sp-local-pair 'racket-mode "`" nil :actions nil))
 
