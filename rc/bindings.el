@@ -116,8 +116,8 @@ Doesn't mess with special buffers."
   "runs compile command based on current major mode."
   (interactive)
   (let ((cmd (cond ((eq major-mode 'js-mode) "npm test")
-
-                   ((eq major-mode 'rust-mode) "cargo build"))))
+                   ((eq major-mode 'rust-mode) "cargo build")
+                   ((eq major-mode 'haskell-mode) "cabal run"))))
     (progn
       (print cmd)
       (save-some-buffers 1)
@@ -136,6 +136,8 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "M-o")     'smart-open-line)
 (global-set-key (kbd "M-s")     'sp-splice-sexp)
 (global-set-key (kbd "C-c s")   'helm-imenu)
+(global-set-key (kbd "M-%")     'anzu-query-replace)
+(global-set-key (kbd "C-M-%")   'anzu-query-replace-regexp)
 
 (define-key isearch-mode-map (kbd "<backspace>")
   #'isearch-delete-something)
