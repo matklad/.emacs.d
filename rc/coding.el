@@ -84,7 +84,9 @@
   :ensure t
   :config
   (global-paren-face-mode)
-  (push 'racket-mode paren-face-modes))
+  (push 'racket-mode paren-face-modes)
+  (custom-set-faces
+   '(parenthesis ((t (:foreground "#DCDCCC"))))))
 
 (global-prettify-symbols-mode)
 
