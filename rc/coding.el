@@ -83,12 +83,16 @@
 (use-package paren-face
   :ensure t
   :config
-  (global-paren-face-mode))
+  (global-paren-face-mode)
+  (push 'racket-mode paren-face-modes))
+
+(global-prettify-symbols-mode)
+
+(defun prettify-lambda ()
+  (push '("lambda"  . ?λ) prettify-symbols-alist))
 
 (defun my-racket-hook ()
-  (paren-face-mode)
-  (push '("lambda"  . ?λ) prettify-symbols-alist)
-  (prettify-symbols-mode))
+  (prettify-lambda))
 
 (use-package racket-mode
   :config
