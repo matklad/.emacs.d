@@ -170,12 +170,7 @@
 (setq-default c-default-style "my-cc-style")
 
 
-
 ;; Haskell
-
-(use-package haskell-mode
-  :ensure t)
-
 
 (use-package hi2
   :ensure t
@@ -185,6 +180,19 @@
             '(lambda ()
                (yas-minor-mode -1)
                (turn-on-hi2))))
+
+(defun hi2-smart-open-line ()
+  (interactive)
+  (move-end-of-line nil)
+  (hi2-newline-and-indent)
+  (recenter))
+
+(use-package haskell-mode
+  :ensure t
+  :config
+  (define-key haskell-mode-map (kbd "M-o") 'hi2-smart-open-line)
+  (setq flycheck-ghc-args '("-Wall" "-fno-warn-name-shadowing")))
+
 
 ;; Latex
 
