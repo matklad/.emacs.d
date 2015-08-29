@@ -112,14 +112,19 @@ Doesn't mess with special buffers."
       (insert replacement-char))))
 
 
+
+(put 'smart-compile-command 'safe-local-variable #'stringp)
+
 (defun smart-compile ()
   "runs compile command based on current major mode."
   (interactive)
-  (let ((cmd (cond ((eq major-mode 'js-mode) "npm test")
-                   ((eq major-mode 'rust-mode) "cargo build")
-                   ((eq major-mode 'haskell-mode) "cabal run"))))
+  (let* ((cmd
+          (cond ((bound-and-true-p smart-compile-command) smart-compile-command)
+                ((eq major-mode 'js-mode) "npm test")
+                ((eq major-mode 'rust-mode) "cargo build")
+                ((eq major-mode 'haskell-mode) "cabal run")))
+         (default-directory (projectile-project-root)))
     (progn
-      (print cmd)
       (save-some-buffers 1)
       (compile cmd))))
 

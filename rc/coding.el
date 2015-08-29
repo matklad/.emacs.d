@@ -175,6 +175,32 @@
 
 (setq-default c-default-style "my-cc-style")
 
+;; Ocaml
+
+(use-package tuareg
+  :ensure t)
+
+(use-package utop
+  :ensure t)
+
+(use-package merlin
+  :ensure t
+  :config
+  (add-hook 'tuareg-mode-hook 'tuareg-imenu-set-imenu)
+  (setq auto-mode-alist
+        (append '(("\\.ml[ily]?$" . tuareg-mode)
+                  ("\\.topml$" . tuareg-mode))
+                auto-mode-alist))
+  (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
+  (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
+  (add-hook 'tuareg-mode-hook 'merlin-mode))
+
+
+;; (use-package flycheck-ocaml
+;;   :ensure t
+;;   :config
+;;   (setq merlin-error-after-save nil)
+;;   (flycheck-ocaml-setup))
 
 ;; Haskell
 
