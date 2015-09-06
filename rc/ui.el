@@ -35,6 +35,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (add-to-list 'default-frame-alist '(font . "Source Code Pro-10"))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'after-make-frame-functions '(lambda (frame)
                                          (load-theme my-theme t)) t)
 

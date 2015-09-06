@@ -178,7 +178,11 @@
 ;; Ocaml
 
 (use-package tuareg
-  :ensure t)
+  :ensure t
+  :config
+  (define-key tuareg-mode-map (kbd "C-c C-c") 'smart-compile)
+  (sp-local-pair 'tuareg-mode "'" nil :actions nil)
+  (setq compilation-auto-jump-to-first-error 't))
 
 (use-package utop
   :ensure t)
