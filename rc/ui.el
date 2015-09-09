@@ -11,7 +11,7 @@
 (use-package base16-theme
   :ensure t)
 
-(defvar my-theme 'zenburn)
+(defvar my-theme 'leuven)
 
 (defun switch-theme (name)
   (interactive

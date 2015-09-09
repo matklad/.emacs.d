@@ -18,7 +18,4 @@ col=$3
          (forward-line (1- $2))
          (forward-char (1- $3)))
 
-       ;; Raise/focus our window; depends on the windowing system
-       (if (string-equal system-type \"darwin\")
-         (ns-do-applescript \"tell application \\\"Emacs\\\" to activate\")
-         (raise-frame)))"
+       (select-frame-set-input-focus (selected-frame)))"
