@@ -1,17 +1,15 @@
 (require 'use-package)
 
-(use-package zenburn-theme
+(use-package solarized-theme
   :ensure t
   :defer t)
 
-(use-package solarized-theme
+(use-package zenburn-theme
   :ensure t
   :defer t)
 
 (use-package base16-theme
   :ensure t)
-
-(defvar my-theme 'leuven)
 
 (defun switch-theme (name)
   (interactive
@@ -19,9 +17,8 @@
     (intern (completing-read "Load custom theme: "
                              (mapcar 'symbol-name (custom-available-themes))))))
   (mapc #'disable-theme custom-enabled-themes)
-  (load-theme name t))
-
-(switch-theme my-theme)
+  (custom-set-variables
+   `(custom-enabled-themes (quote (,name)))))
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -36,8 +33,6 @@
 
 (add-to-list 'default-frame-alist '(font . "Source Code Pro-10"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-hook 'after-make-frame-functions '(lambda (frame)
-                                         (load-theme my-theme t)) t)
 
 (use-package golden-ratio
   :ensure t

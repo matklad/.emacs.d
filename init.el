@@ -26,4 +26,7 @@
 (load-local "rc/bindings.el")
 (load-local "rc/coding.el")
 
+(setq custom-file (local-file-name "cache/custom.el"))
+(load custom-file)
+
 ;;; init.el ends here
