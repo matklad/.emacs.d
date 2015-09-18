@@ -175,6 +175,11 @@
 
 (setq-default c-default-style "my-cc-style")
 
+;; OpenGL
+
+(use-package glsl-mode
+  :ensure t)
+
 ;; Ocaml
 
 (use-package tuareg

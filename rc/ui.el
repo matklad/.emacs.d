@@ -17,8 +17,8 @@
     (intern (completing-read "Load custom theme: "
                              (mapcar 'symbol-name (custom-available-themes))))))
   (mapc #'disable-theme custom-enabled-themes)
-  (custom-set-variables
-   `(custom-enabled-themes (quote (,name)))))
+  (customize-save-variable
+   `custom-enabled-themes (list name)))
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
