@@ -1,5 +1,6 @@
 ;;; init.el ---
 
+(setq inhibit-x-resources 't)
 
 (defvar local-dir user-emacs-directory
   "The root dir of the Emacs configuration.")
