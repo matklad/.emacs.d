@@ -244,9 +244,11 @@
 
 (defun toggle-formula ()
   (interactive)
-  (if (eq nil (search-forward "$" (+ (point) 4) 't 1))
+  (if (eq nil (search-forward "\\)" (+ (point) 4) 't 1))
       (progn
-        (insert "$$")
+        (insert "\\(  \\)")
+        (backward-char)
+        (backward-char)
         (backward-char)
         (deactivate-input-method))
     (toggle-input-method)))
@@ -261,7 +263,7 @@
 (use-package tex
   :ensure auctex
   :config
-  (setq-default TeX-engine 'xetex
+  (setq-default TeX-engine 'default
                 TeX-PDF-mode t)
   (add-hook 'LaTeX-mode-hook 'latex-hook))
 
