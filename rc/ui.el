@@ -45,3 +45,11 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))
       mouse-wheel-progressive-speed nil
       mouse-wheel-follow-mouse 't)
+
+(defun change-cursor-on-input-method ()
+  "Set cursor type depending on whether an input method is used or not."
+  (set-cursor-color (if current-input-method
+                        "steelblue"
+                      "white")))
+
+(add-hook 'post-command-hook 'change-cursor-on-input-method)
