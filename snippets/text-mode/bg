@@ -1,11 +1,11 @@
 # -*- mode: snippet; require-final-newline: nil -*-
-# name: exp
-# key: exp
+# name: bg
+# key: bg
 # binding: direct-keybinding
 # --
-    ```
+    \`\`\`python
     # Плохо
     $0
 
     # Лучше
-    ```
+    \`\`\`

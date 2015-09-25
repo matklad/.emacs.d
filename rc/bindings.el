@@ -143,7 +143,8 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "C-c s")   'helm-imenu)
 (global-set-key (kbd "M-%")     'anzu-query-replace)
 (global-set-key (kbd "C-M-%")   'anzu-query-replace-regexp)
-(global-set-key (kbd "C-c l")   'toggle-input-method)
+(global-set-key (kbd "S-SPC")   'toggle-input-method)
+(global-set-key (kbd "C-H")     'delete-backward-char)
 
 (define-key isearch-mode-map (kbd "<backspace>")
   #'isearch-delete-something)
