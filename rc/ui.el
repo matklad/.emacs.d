@@ -34,6 +34,8 @@
 (add-to-list 'default-frame-alist '(font . "Source Code Pro-10"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+(set-default-font "Ubuntu Mono 12")
+
 (use-package golden-ratio
   :ensure t
   :diminish golden-ratio-mode

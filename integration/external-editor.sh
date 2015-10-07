@@ -3,7 +3,7 @@
 file=$1
 line=$2
 col=$3
-/usr/bin/emacsclient -c -e \
+/usr/bin/emacsclient -c -a "" -e \
     "(progn
 
        ;; Load the file
