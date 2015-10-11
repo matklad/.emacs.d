@@ -144,6 +144,7 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "M-%")     'anzu-query-replace)
 (global-set-key (kbd "C-M-%")   'anzu-query-replace-regexp)
 (global-set-key (kbd "S-SPC")   'toggle-input-method)
+(global-set-key (kbd "M-h")     'backward-kill-word)
 (define-key key-translation-map [?\C-h] [?\C-?])
 
 
