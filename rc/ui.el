@@ -31,10 +31,12 @@
 (setq inhibit-startup-screen t)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-10"))
+(add-to-list 'default-frame-alist '(font . "hack 10"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(set-default-font "Ubuntu Mono 12")
+;; (set-default-font "Source Code Pro 10")
+(set-default-font "Hack 10")
+;; (set-default-font "Ubuntu Mono 11")
 
 (use-package golden-ratio
   :ensure t
