@@ -6,6 +6,8 @@
 
 (add-hook 'prog-mode-hook 'turn-on-whitespace)
 
+(which-function-mode 't)
+
 
 (use-package flycheck
   :ensure t
