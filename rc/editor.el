@@ -310,7 +310,7 @@ Syscall                                      50   ns
 Main memory reference                       100   ns             20x L2 cache, 200x L1 cache
 Compress 1K bytes with Zippy              3,000   ns
 Send 1K bytes over 1 Gbps network        10,000   ns    0.01 ms
-Context switch                           30,000   ns    0.03 ms
+Context switch                           30,000   ns    0.03 ms  300x memory reference
 Read 4K randomly from SSD*              150,000   ns    0.15 ms
 Read 1 MB sequentially from memory      250,000   ns    0.25 ms
 Round trip within same datacenter       500,000   ns    0.5  ms
