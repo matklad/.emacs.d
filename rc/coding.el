@@ -351,3 +351,7 @@
   :ensure t
   :config
   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+;; Kotlin
+
+(add-to-list 'auto-mode-alist '("\\.kt\\'" . java-mode))
