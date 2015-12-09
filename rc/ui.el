@@ -31,7 +31,7 @@
 (setq inhibit-startup-screen t)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(add-to-list 'default-frame-alist '(font . "hack 10"))
+(add-to-list 'default-frame-alist '(font . "Hack 10"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; (set-default-font "Source Code Pro 10")
