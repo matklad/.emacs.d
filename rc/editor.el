@@ -107,7 +107,7 @@
   (global-company-mode)
   (define-key company-mode-map (kbd "C-M-i") 'company-complete)
   (setq company-require-match "Off"
-        company-clang-arguments '("-std=c++11")
+        company-clang-arguments '("-std=c++14")
         company-idle-delay 0
         company-show-numbers t))
 
@@ -166,7 +166,7 @@
         projectile-keymap-prefix (kbd "C-c p")
         projectile-cache-file (local-file-name "cache/projectile.cache")
         projectile-known-projects-file (local-file-name "store/projectile-bookmarks.eld"))
-  (projectile-global-mode))
+  (projectile-mode))
 
 
 (use-package helm-projectile
@@ -265,9 +265,6 @@
 
 (winner-mode t)
 
-
-(use-package god-mode
-  :ensure t)
 
 
 (use-package rainbow-mode

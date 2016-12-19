@@ -82,14 +82,6 @@
 (use-package rainbow-delimiters
   :ensure t)
 
-(use-package paren-face
-  :ensure t
-  :config
-  (global-paren-face-mode)
-  (push 'racket-mode paren-face-modes)
-  (custom-set-faces
-   '(parenthesis ((t (:foreground "#DCDCCC"))))))
-
 (global-prettify-symbols-mode)
 
 (defun prettify-lambda ()

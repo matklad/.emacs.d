@@ -34,9 +34,8 @@
 (add-to-list 'default-frame-alist '(font . "Hack 10"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; (set-default-font "Source Code Pro 10")
-(set-default-font "Hack 10")
-;; (set-default-font "Ubuntu Mono 11")
+(set-frame-font "Hack 10")
+
 
 (use-package golden-ratio
   :ensure t
@@ -49,11 +48,3 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))
       mouse-wheel-progressive-speed nil
       mouse-wheel-follow-mouse 't)
-
-(defun change-cursor-on-input-method ()
-  "Set cursor type depending on whether an input method is used or not."
-  (set-cursor-color (if current-input-method
-                        "steelblue"
-                      "white")))
-
-(add-hook 'post-command-hook 'change-cursor-on-input-method)

@@ -143,10 +143,11 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "C-c s")   'helm-imenu)
 (global-set-key (kbd "M-%")     'anzu-query-replace)
 (global-set-key (kbd "C-M-%")   'anzu-query-replace-regexp)
-(global-set-key (kbd "S-SPC")   'toggle-input-method)
 (global-set-key (kbd "M-h")     'backward-kill-word)
 (global-set-key (kbd "C-c n")   'helm-all-mark-rings)
 (global-set-key (kbd "C-c b")   'pop-global-mark)
+(global-set-key (kbd "C-z")     'undo)
+(global-set-key (kbd "C-S-z")   'redo)
 (define-key key-translation-map [?\C-h] [?\C-?])
 
 
