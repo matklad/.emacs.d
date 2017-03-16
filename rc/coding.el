@@ -347,3 +347,6 @@
 ;; Kotlin
 
 (add-to-list 'auto-mode-alist '("\\.kt\\'" . java-mode))
+
+(use-package nasm-mode
+  :ensure t)

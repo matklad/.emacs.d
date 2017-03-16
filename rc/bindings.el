@@ -138,7 +138,7 @@ Doesn't mess with special buffers."
 (global-set-key (kbd "C-c k")   'kill-other-buffers)
 (global-set-key (kbd "C-c r")   'rename-buffer-and-file)
 (global-set-key (kbd "M-/")     'hippie-expand)
-(global-set-key (kbd "M-o")     'smart-open-line)
+(global-set-key (kbd "<S-enter>")     'smart-open-line)
 (global-set-key (kbd "M-s")     'sp-splice-sexp)
 (global-set-key (kbd "C-c s")   'helm-imenu)
 (global-set-key (kbd "M-%")     'anzu-query-replace)
