@@ -6,6 +6,7 @@
       auto-save-file-name-transforms `((".*"  ,(expand-file-name "autosave/" "~/.cache/emacs/") t))
       mac-command-modifier 'meta
       mac-option-modifier 'super
+      scroll-error-top-bottom t
       )
 
 (setq-default indent-tabs-mode nil
@@ -36,6 +37,9 @@
 (global-set-key (kbd "s-<right>") #'forward-word)
 (global-set-key (kbd "s-<backspace>") #'backward-kill-word)
 (global-set-key (kbd "s-<kp-delete>") #'kill-word)
+
+(global-set-key (kbd "M-<up>") #'beginning-of-buffer)
+(global-set-key (kbd "M-<down>") #'end-of-buffer)
 
 (global-set-key (kbd "C-k") #'kill-whole-line)
 
