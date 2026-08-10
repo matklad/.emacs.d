@@ -28,8 +28,6 @@
 (global-hl-line-mode 1)
 (auto-save-visited-mode 1)
 
-(load-theme 'leuven t)
-
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 
 (global-set-key (kbd "M-z") #'undo)
@@ -106,6 +104,21 @@
   (interactive)
   (find-file user-init-file))
 
+(defun switch-to-theme (theme)
+  "Disable all enabled themes and load THEME."
+  (interactive
+   (list
+    (intern
+     (completing-read
+      "Theme: "
+      (mapcar #'symbol-name (custom-available-themes))
+      nil t))))
+
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme theme t))
+
+(switch-to-theme 'leuven)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -113,8 +126,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
- '(package-selected-packages
-   '(devil hydra magit multiple-cursors orderless vertico zenburn-theme zig-mode)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
