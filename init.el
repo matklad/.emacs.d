@@ -10,6 +10,7 @@
       completion-styles '(flex)
       auto-save-visited-interval 1
       after-focus-change-function (lambda () (save-some-buffers t))
+      zig-format-on-save nil
       )
 
 (setq-default indent-tabs-mode nil
@@ -34,7 +35,13 @@
 (global-set-key (kbd "M-z") #'undo)
 (global-set-key (kbd "M-c") #'copy-region-as-kill)
 (global-set-key (kbd "M-v") #'yank)
-(global-set-key (kbd "M-x") #'kill-region)
+(defun cut-line-or-region ()
+  "Cut the active region, or the current line if no region is active."
+  (interactive)
+  (if (use-region-p)
+      (call-interactively #'kill-region)
+    (kill-whole-line)))
+(global-set-key (kbd "M-x") #'cut-line-or-region)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (global-set-key (kbd "M-<left>")  #'beginning-of-line)
