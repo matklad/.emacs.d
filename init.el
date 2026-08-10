@@ -65,15 +65,19 @@
   (package-refresh-contents))
 
 (dolist (pkg '(zig-mode magit multiple-cursors devil magit zenburn-theme
-                        hydra vertico orderless))
+                        hydra))
   (unless (package-installed-p pkg)
     (package-install pkg)))
 
-(require 'vertico)
-(vertico-mode)
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
 
-(require 'orderless)
-(setq completion-styles '(orderless basic))
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic)))
 
 (require 'devil)
 (global-set-key (kbd "M-x") #'kill-region)
