@@ -80,6 +80,7 @@
 (global-set-key (kbd "C-c x") #'execute-extended-command)
 
 (add-to-list 'devil-translations '(", m x" . "C-c x"))
+(add-to-list 'devil-translations '(", ." . "M-."))
 (global-devil-mode 1)
 
 (require 'hydra)
@@ -98,6 +99,13 @@
   ("X" project-async-shell-command "async shell command"))
 
 (global-set-key (kbd "C-x p") #'project-hydra/body)
+
+(require 'eglot)
+(require 'zig-mode)
+
+(add-hook 'zig-mode-hook #'eglot-ensure)
+(add-to-list 'eglot-server-programs
+               '(zig-mode . ("~/bin/zls-0.16.0")))
 
 (defun visit-init-file ()
   "Open the user's Emacs init file."
