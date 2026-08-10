@@ -18,6 +18,7 @@
 	          fill-column 80)
 
 (add-to-list 'default-frame-alist '(font . "JetBrains Mono-16"))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -40,6 +41,7 @@
       (call-interactively #'kill-region)
     (kill-whole-line)))
 (global-set-key (kbd "M-x") #'cut-line-or-region)
+(global-set-key (kbd "C-c x") #'execute-extended-command)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (global-set-key (kbd "M-<left>")  #'beginning-of-line)
@@ -88,28 +90,28 @@
   (diff-hl-flydiff-mode))
 
 (require 'devil)
-(global-set-key (kbd "C-c x") #'execute-extended-command)
-
 (add-to-list 'devil-translations '(", m x" . "C-c x"))
 (add-to-list 'devil-translations '(", ." . "M-."))
 (global-devil-mode 1)
 
-(require 'hydra)
 
-(defhydra project-hydra (:color teal)
-  ("f" project-find-file "find file")
-  ("g" project-find-regexp "find regexp")
-  ("d" project-dired "dired")
-  ("b" project-switch-to-buffer "switch buffer")
-  ("p" project-switch-project "switch project")
-  ("k" project-kill-buffers "kill buffers")
-  ("c" project-compile "compile")
-  ("e" project-eshell "eshell")
-  ("v" project-vc-dir "vc dir")
-  ("x" project-shell-command "shell command")
-  ("X" project-async-shell-command "async shell command"))
+(use-package hydra
+  :ensure t
+  :config
+  (defhydra project-hydra (:color teal)
+    ("f" project-find-file "find file")
+    ("g" project-find-regexp "find regexp")
+    ("d" project-dired "dired")
+    ("b" project-switch-to-buffer "switch buffer")
+    ("p" project-switch-project "switch project")
+    ("k" project-kill-buffers "kill buffers")
+    ("c" project-compile "compile")
+    ("e" project-eshell "eshell")
+    ("v" project-vc-dir "vc dir")
+    ("x" project-shell-command "shell command")
+    ("X" project-async-shell-command "async shell command"))
 
-(global-set-key (kbd "C-x p") #'project-hydra/body)
+  (global-set-key (kbd "C-x p") #'project-hydra/body))
 
 (use-package corfu
   :ensure t
