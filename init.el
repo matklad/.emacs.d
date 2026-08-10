@@ -56,7 +56,6 @@
 
 (global-set-key (kbd "M-<up>") #'beginning-of-buffer)
 (global-set-key (kbd "M-<down>") #'end-of-buffer)
-
 (global-set-key (kbd "C-k") #'kill-whole-line)
 
 (require 'package)
@@ -76,7 +75,6 @@
   :init
   (vertico-mode))
 
-
 (use-package orderless
   :ensure t
   :custom
@@ -89,11 +87,14 @@
   :config
   (diff-hl-flydiff-mode))
 
-(require 'devil)
-(add-to-list 'devil-translations '(", m x" . "C-c x"))
-(add-to-list 'devil-translations '(", ." . "M-."))
-(global-devil-mode 1)
-
+(use-package devil
+  :ensure t
+  :demand t
+  :config
+  (add-to-list 'devil-translations '(", m x" . "C-c x"))
+  (add-to-list 'devil-translations '(", ." . "M-."))
+  (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
+  (global-devil-mode 1))
 
 (use-package hydra
   :ensure t
