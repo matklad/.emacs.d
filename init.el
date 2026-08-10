@@ -74,13 +74,13 @@
   :init
   (vertico-mode))
 
+
 (use-package orderless
   :ensure t
   :custom
   (completion-styles '(orderless basic)))
 
 (require 'devil)
-(global-set-key (kbd "M-x") #'kill-region)
 (global-set-key (kbd "C-c x") #'execute-extended-command)
 
 (add-to-list 'devil-translations '(", m x" . "C-c x"))
