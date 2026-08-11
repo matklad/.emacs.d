@@ -160,11 +160,14 @@
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package multiple-cursors
-  :ensure t)
+  :ensure t
+  :demand t
+  (global-set-key (kbd "M-d") #'mc/mark-next-like-this-word))
 (use-package zenburn-theme
   :ensure t)
 (use-package super-save
   :ensure t
+  :demand t
   :config
   (super-save-mode +1)
   (diminish 'super-save-mode))
@@ -173,7 +176,8 @@
   :ensure t
   :demand t
   :config
-  (yas-global-mode +1))
+  (yas-global-mode +1)
+  (diminish 'yasnippet-mode))
 
 (require 'eglot)
 (require 'zig-mode)
