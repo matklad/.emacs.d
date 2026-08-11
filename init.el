@@ -8,9 +8,11 @@
       mac-option-modifier 'super
       scroll-error-top-bottom t
       completion-styles '(flex)
-      zig-format-on-save nil
+      zig-format-on-save t
       require-final-newline t
-      kill-do-not-save-duplicates t)
+      kill-do-not-save-duplicates t
+      compilation-scroll-output t
+      compilation-auto-jump-to-first-error t)
 
 (setq-default indent-tabs-mode nil
 	          tab-width 4
@@ -22,12 +24,13 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
-(delete-selection-mode 1)
-(electric-pair-mode 1)
-(recentf-mode 1)
-(global-hl-line-mode 1)
-(auto-save-visited-mode 1)
+(delete-selection-mode +1)
+(electric-pair-mode +1)
+(recentf-mode +1)
+(global-hl-line-mode +1)
+(auto-save-visited-mode +1)
 (global-auto-revert-mode t)
+(savehist-mode +1)
 
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -122,6 +125,7 @@
   (add-to-list 'devil-translations '(", m x" . "C-c x"))
   (add-to-list 'devil-translations '(", ." . "M-."))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
+  (add-to-list 'devil-repeatable-keys '("%k x `"))
   (global-devil-mode 1))
 
 (use-package hydra
@@ -161,12 +165,18 @@
   (super-save-mode +1)
   (diminish 'super-save-mode))
 
+(use-package yasnippet
+  :ensure t
+  :demand t
+  :config
+  (yas-global-mode +1))
+
 (require 'eglot)
 (require 'zig-mode)
 
 (add-hook 'zig-mode-hook #'eglot-ensure)
 (add-to-list 'eglot-server-programs
-               '(zig-mode . ("~/bin/zls-0.16.0")))
+               '(zig-mode . ("~/bin/zls-0.14.0")))
 
 (defun visit-init-file ()
   "Open the user's Emacs init file."
@@ -197,7 +207,7 @@
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
    '(corfu devil diff-hl diminish hydra magit multiple-cursors orderless super-save
-           vertico zenburn-theme zig-mode))
+           vertico yasnippet zenburn-theme zig-mode))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -205,3 +215,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'dired-find-alternate-file 'disabled nil)
