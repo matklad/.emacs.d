@@ -10,8 +10,7 @@
       completion-styles '(flex)
       auto-save-visited-interval 1
       after-focus-change-function (lambda () (save-some-buffers t))
-      zig-format-on-save nil
-      )
+      zig-format-on-save nil)
 
 (setq-default indent-tabs-mode nil
 	          tab-width 4
