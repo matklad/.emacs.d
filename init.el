@@ -31,6 +31,7 @@
 (auto-save-visited-mode +1)
 (global-auto-revert-mode t)
 (savehist-mode +1)
+(column-number-mode 1)
 
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -149,9 +150,10 @@
 (use-package magit
   :ensure t
   :custom
+  (magit-save-repository-buffers 'dontask)
   (magit-diff-fontify-hunk 'all)
   (magit-diff-specify-hunk-foreground nil)
-  (magit-diff-use-indicator-faces t)))
+  (magit-diff-use-indicator-faces t))
 (use-package diff-hl
   :ensure t
   :init
