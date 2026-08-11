@@ -165,6 +165,7 @@
 (use-package multiple-cursors
   :ensure t
   :demand t
+  :config
   (global-set-key (kbd "M-d") #'mc/mark-next-like-this-word))
 (use-package zenburn-theme
   :ensure t)
