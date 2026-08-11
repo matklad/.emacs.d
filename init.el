@@ -63,6 +63,7 @@
 (global-set-key (kbd "C-k") #'kill-whole-line)
 
 (global-set-key (kbd "C-o") #'project-find-file)
+(global-set-key (kbd "M-[") #'xref-go-back)
 
 (defun open-line-below ()
   "Open new line below"
