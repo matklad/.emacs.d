@@ -29,6 +29,7 @@
 (auto-save-visited-mode 1)
 
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 (global-set-key (kbd "M-z") #'undo)
 (global-set-key (kbd "M-c") #'copy-region-as-kill)
@@ -43,7 +44,7 @@
 (global-set-key (kbd "C-c x") #'execute-extended-command)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
-(global-set-key (kbd "M-<left>")  #'beginning-of-line)
+(global-set-key (kbd "M-<left>")  #'move-beginning-of-line)
 (global-set-key (kbd "M-<right>") #'end-of-line)
 (global-set-key (kbd "M-<backspace>") #'kill-whole-line)
 (global-set-key (kbd "M-<kp-delete>") #'kill-line)
@@ -56,6 +57,32 @@
 (global-set-key (kbd "M-<up>") #'beginning-of-buffer)
 (global-set-key (kbd "M-<down>") #'end-of-buffer)
 (global-set-key (kbd "C-k") #'kill-whole-line)
+
+(global-set-key (kbd "C-o") #'project-find-file)
+
+(defun open-line-below ()
+  "Open new line below"
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
+(global-set-key (kbd "M-<return>") #'open-line-below)
+
+(defun move-beginning-of-line-smart (arg)
+  "Move point back to indentation of beginning of line."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+(global-set-key [remap move-beginning-of-line]
+                'move-beginning-of-line-smart)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -79,7 +106,8 @@
   :init
   (global-diff-hl-mode)
   :config
-  (diff-hl-flydiff-mode))
+  (diff-hl-flydiff-mode)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package devil
   :ensure t
@@ -156,7 +184,8 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
- '(package-selected-packages nil))
+ '(package-selected-packages nil)
+ '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
