@@ -109,14 +109,6 @@
   :custom
   (completion-styles '(orderless basic)))
 
-(use-package diff-hl
-  :ensure t
-  :init
-  (global-diff-hl-mode)
-  :config
-  (diff-hl-flydiff-mode)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
-
 (use-package devil
   :ensure t
   :demand t
@@ -154,7 +146,19 @@
   (global-corfu-mode))
 
 (use-package magit
-  :ensure t)
+  :ensure t
+  :custom
+  (magit-diff-fontify-hunk 'all)
+  (magit-diff-specify-hunk-foreground nil)
+  (magit-diff-use-indicator-faces t)))
+(use-package diff-hl
+  :ensure t
+  :init
+  (global-diff-hl-mode)
+  :config
+  (diff-hl-flydiff-mode)
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+
 (use-package multiple-cursors
   :ensure t)
 (use-package zenburn-theme
