@@ -64,11 +64,6 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-(dolist (pkg '(zig-mode magit multiple-cursors devil magit zenburn-theme
-                        hydra))
-  (unless (package-installed-p pkg)
-    (package-install pkg)))
-
 (use-package vertico
   :ensure t
   :init
@@ -120,6 +115,13 @@
   :init
   (global-corfu-mode))
 
+(use-package magit
+  :ensure t)
+(use-package multiple-cursors
+  :ensure t)
+(use-package zenburn-theme
+  :ensure t)
+
 (require 'eglot)
 (require 'zig-mode)
 
@@ -154,9 +156,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
- '(package-selected-packages
-   '(corfu devil diff-hl hydra magit multiple-cursors orderless vertico
-           zenburn-theme zig-mode)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
