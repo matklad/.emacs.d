@@ -12,7 +12,7 @@
       require-final-newline t
       kill-do-not-save-duplicates t
       compilation-scroll-output t
-      compilation-auto-jump-to-first-error t)
+      compilation-auto-jump-to-first-error nil)
 
 (setq-default indent-tabs-mode nil
 	          tab-width 4
@@ -57,6 +57,9 @@
 
 (global-set-key (kbd "C-o") #'project-find-file)
 (global-set-key (kbd "M-[") #'xref-go-back)
+(global-set-key (kbd "M-/") #'comment-line)
+
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (defun open-line-below ()
   "Open new line below"
@@ -129,6 +132,7 @@
   (add-to-list 'devil-translations '(", m x" . "C-c x"))
   (add-to-list 'devil-translations '(", ." . "M-."))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
+  (add-to-list 'devil-translations '(", 2" . "C-x P c"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
   (global-set-key (kbd "C-2") #'recompile)
   (global-devil-mode 1))
@@ -149,7 +153,8 @@
     ("x" project-shell-command "shell command")
     ("X" project-async-shell-command "async shell command"))
 
-  (global-set-key (kbd "C-x p") #'project-hydra/body))
+  (global-set-key (kbd "C-x p") #'project-hydra/body)
+  (global-set-key (kbd "C-x P c") #'project-compile))
 
 (use-package corfu
   :ensure t
