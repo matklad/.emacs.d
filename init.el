@@ -37,15 +37,7 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 (global-set-key (kbd "M-z") #'undo)
-(global-set-key (kbd "M-c") #'copy-region-as-kill)
 (global-set-key (kbd "M-v") #'yank)
-(defun cut-line-or-region ()
-  "Cut the active region, or the current line if no region is active."
-  (interactive)
-  (if (use-region-p)
-      (call-interactively #'kill-region)
-    (kill-whole-line)))
-(global-set-key (kbd "M-x") #'cut-line-or-region)
 (global-set-key (kbd "C-c x") #'execute-extended-command)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
@@ -72,6 +64,24 @@
   (end-of-line)
   (newline-and-indent))
 (global-set-key (kbd "M-<return>") #'open-line-below)
+
+(defun kill-region-smart ()
+  "Cut the active region, or the current line if no region is active."
+  (interactive)
+  (if (use-region-p)
+      (call-interactively #'kill-region)
+    (kill-whole-line)))
+(global-set-key (kbd "M-x") #'kill-region-smart)
+
+(defun kill-ring-save-smart ()
+  (interactive)
+  (if (use-region-p)
+      (call-interactively #'kill-ring-save)
+    (save-excursion
+      (beginning-of-line)
+      (copy-region-as-kill (line-beginning-position)
+                           (line-beginning-position 2)))))
+(global-set-key (kbd "M-c") #'kill-ring-save-smart)
 
 (defun move-beginning-of-line-smart (arg)
   "Move point back to indentation of beginning of line."
@@ -120,6 +130,7 @@
   (add-to-list 'devil-translations '(", ." . "M-."))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
+  (global-set-key (kbd "C-2") #'recompile)
   (global-devil-mode 1))
 
 (use-package hydra
@@ -146,6 +157,9 @@
   (corfu-auto t)
   :init
   (global-corfu-mode))
+
+(use-package consult
+  :ensure t)
 
 (use-package magit
   :ensure t
@@ -188,7 +202,10 @@
 
 (add-hook 'zig-mode-hook #'eglot-ensure)
 (add-to-list 'eglot-server-programs
-               '(zig-mode . ("~/bin/zls-0.14.0")))
+             '(zig-mode . ("~/bin/zls-0.14.0"
+                           :initializationOptions
+                           (:enable_argument_placeholders :json-false))))
+(global-set-key (kbd "C-p") #'eglot-format-buffer)
 
 (defun visit-init-file ()
   "Open the user's Emacs init file."
@@ -218,8 +235,8 @@
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
-   '(corfu devil diff-hl diminish hydra magit multiple-cursors orderless super-save
-           vertico yasnippet zenburn-theme zig-mode))
+   '(consult corfu devil diff-hl diminish hydra magit multiple-cursors orderless
+             super-save vertico yasnippet zenburn-theme zig-mode))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
