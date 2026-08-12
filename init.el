@@ -156,7 +156,25 @@
   :custom
   (corfu-auto t)
   :init
-  (global-corfu-mode))
+  (global-corfu-mode +1))
+
+(use-package yasnippet
+  :ensure t
+  :demand t
+  :config
+  (yas-global-mode +1)
+  (diminish 'yas-minor-mode))
+
+(defun yas-expand-or-corfu-complete ()
+  "Prefer Yasnippet expansion over Corfu completion."
+  (interactive)
+  (if (yas-expand)
+      t
+    (corfu-complete)))
+
+(with-eval-after-load 'corfu
+  (define-key corfu-map (kbd "TAB") #'yas-expand-or-corfu-complete)
+  (define-key corfu-map (kbd "<tab>") #'yas-expand-or-corfu-complete))
 
 (use-package consult
   :ensure t)
@@ -189,13 +207,6 @@
   :config
   (super-save-mode +1)
   (diminish 'super-save-mode))
-
-(use-package yasnippet
-  :ensure t
-  :demand t
-  :config
-  (yas-global-mode +1)
-  (diminish 'yasnippet-mode))
 
 (use-package eglot
   :ensure nil
@@ -238,7 +249,7 @@
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
    '(consult corfu devil diff-hl diminish hydra magit multiple-cursors orderless
-             super-save vertico yasnippet zenburn-theme zig-mode))
+             super-save vertico yasnippet yasnippet-capf zenburn-theme zig-mode))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
