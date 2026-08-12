@@ -197,15 +197,17 @@
   (yas-global-mode +1)
   (diminish 'yasnippet-mode))
 
-(require 'eglot)
-(require 'zig-mode)
+(use-package eglot
+  :ensure nil
+  :config
+  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
+  (global-set-key (kbd "C-p") #'eglot-format-buffer)
+  (add-to-list 'eglot-server-programs
+               '(zig-mode . ("~/bin/zls-0.14.0"))))
 
-(add-hook 'zig-mode-hook #'eglot-ensure)
-(add-to-list 'eglot-server-programs
-             '(zig-mode . ("~/bin/zls-0.14.0"
-                           :initializationOptions
-                           (:enable_argument_placeholders :json-false))))
-(global-set-key (kbd "C-p") #'eglot-format-buffer)
+(use-package zig-mode
+  :config
+  (add-hook 'zig-mode-hook #'eglot-ensure))
 
 (defun visit-init-file ()
   "Open the user's Emacs init file."
