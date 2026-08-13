@@ -36,6 +36,7 @@
 
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 
 (global-set-key (kbd "M-z") #'undo)
 (global-set-key (kbd "M-v") #'yank)
@@ -104,6 +105,13 @@
       (move-beginning-of-line 1))))
 (global-set-key [remap move-beginning-of-line]
                 'move-beginning-of-line-smart)
+
+(defun toggle-fold ()
+  (interactive)
+  (save-excursion
+    (end-of-line)
+    (hs-toggle-hiding)))
+(global-set-key (kbd "C-f") #'toggle-fold)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
