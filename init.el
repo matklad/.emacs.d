@@ -12,6 +12,7 @@
       require-final-newline t
       kill-do-not-save-duplicates t
       compilation-scroll-output t
+      compilation-ask-about-save nil
       compilation-auto-jump-to-first-error nil)
 
 (setq-default indent-tabs-mode nil
@@ -55,9 +56,10 @@
 (global-set-key (kbd "M-<down>") #'end-of-buffer)
 (global-set-key (kbd "C-k") #'kill-whole-line)
 
-(global-set-key (kbd "C-o") #'project-find-file)
+(global-set-key (kbd "C-o") #'consult-buffer)
 (global-set-key (kbd "M-[") #'xref-go-back)
 (global-set-key (kbd "M-/") #'comment-line)
+(global-set-key (kbd "s-/") #'hippie-expand)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -131,6 +133,7 @@
   (diminish 'devil-mode)
   (add-to-list 'devil-translations '(", m x" . "C-c x"))
   (add-to-list 'devil-translations '(", ." . "M-."))
+  (add-to-list 'devil-translations '(", l" . "M-g i"))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
   (add-to-list 'devil-translations '(", 2" . "C-x P c"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
@@ -155,6 +158,11 @@
 
   (global-set-key (kbd "C-x p") #'project-hydra/body)
   (global-set-key (kbd "C-x P c") #'project-compile))
+
+(use-package avy
+  :ensure t
+  :bind
+  ("s-." . avy-goto-word-1))
 
 (use-package corfu
   :ensure t
@@ -182,7 +190,21 @@
   (define-key corfu-map (kbd "<tab>") #'yas-expand-or-corfu-complete))
 
 (use-package consult
-  :ensure t)
+  :ensure t
+  :bind
+  ("C-x b" . consult-buffer)
+  ("M-g i" . consult-imenu)
+  ("M-g I" . consult-imenu-multi)
+  ;; M-s bindings in `search-map'
+  ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+  ("M-s c" . consult-locate)
+  ("M-s g" . consult-ripgrep)
+  ("M-s G" . consult-git-grep)
+  ("M-s r" . consult-ripgrep)
+  ("M-s l" . consult-line)
+  ("M-s L" . consult-line-multi)
+  ("M-s k" . consult-keep-lines)
+  ("M-s u" . consult-focus-lines))
 
 (use-package magit
   :ensure t
@@ -253,8 +275,9 @@
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
-   '(consult corfu devil diff-hl diminish hydra magit multiple-cursors orderless
-             super-save vertico yasnippet yasnippet-capf zenburn-theme zig-mode))
+   '(avy consult corfu devil diff-hl diminish hydra magit multiple-cursors
+         orderless super-save vertico yasnippet yasnippet-capf zenburn-theme
+         zig-mode))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
