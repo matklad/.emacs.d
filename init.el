@@ -13,7 +13,8 @@
       kill-do-not-save-duplicates t
       compilation-scroll-output t
       compilation-ask-about-save nil
-      compilation-auto-jump-to-first-error nil)
+      compilation-auto-jump-to-first-error nil
+      scroll-preserve-screen-position 't)
 
 (setq-default indent-tabs-mode nil
 	          tab-width 4
@@ -21,6 +22,9 @@
 
 (add-to-list 'default-frame-alist '(font . "JetBrains Mono-16"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+;; (add-to-list 'default-frame-alist '(undecorated . t))
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -32,7 +36,8 @@
 (auto-save-visited-mode +1)
 (global-auto-revert-mode t)
 (savehist-mode +1)
-(column-number-mode 1)
+(column-number-mode +1)
+(which-key-mode +1)
 
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -254,6 +259,7 @@
   ("M-]" . #'better-jumper-jump-forward)
   :config
   (better-jumper-mode 1)
+  (diminish 'better-jumper-mode)
 
   (with-eval-after-load 'xref
     (advice-add #'xref-push-marker-stack :override
@@ -268,8 +274,19 @@
                '(zig-mode . ("~/bin/zls-0.14.0"))))
 
 (use-package zig-mode
+  :enshure t
   :config
   (add-hook 'zig-mode-hook #'eglot-ensure))
+
+(use-package markdown-mode
+  :ensure t
+  :custom
+  (markdown-fontify-code-blocks-natively t)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.djot\\'" . markdown-mode)))
+
+(use-package paredit
+  :hook (emacs-lisp-mode . paredit-mode))
 
 (defun visit-init-file ()
   "Open the user's Emacs init file."
@@ -289,7 +306,7 @@
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme t))
 
-(switch-to-theme 'leuven)
+(switch-to-theme 'zenburn)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -299,9 +316,9 @@
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
-   '(avy better-jumper consult corfu crux devil diff-hl diminish hydra magit
-         multiple-cursors orderless super-save vertico yasnippet yasnippet-capf
-         zenburn-theme zig-mode))
+   '(avy better-jumper consult corfu crux devil diff-hl diminish djot-mode hydra
+         magit markdown-mode multiple-cursors orderless super-save vertico
+         yasnippet yasnippet-capf zenburn-theme zig-mode))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
