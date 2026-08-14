@@ -58,7 +58,6 @@
 (global-set-key (kbd "C-k") #'kill-whole-line)
 
 (global-set-key (kbd "C-o") #'consult-buffer)
-(global-set-key (kbd "M-[") #'xref-go-back)
 (global-set-key (kbd "M-/") #'comment-line)
 (global-set-key (kbd "s-/") #'hippie-expand)
 
@@ -133,6 +132,11 @@
   :ensure t
   :custom
   (completion-styles '(orderless basic)))
+
+(use-package crux
+  :ensure t
+  :bind
+  ("C-j" . #'crux-top-join-line))
 
 (use-package devil
   :ensure t
@@ -243,6 +247,18 @@
   (super-save-mode +1)
   (diminish 'super-save-mode))
 
+(use-package better-jumper
+  :ensure t
+  :bind
+  ("M-[" . #'better-jumper-jump-backward)
+  ("M-]" . #'better-jumper-jump-forward)
+  :config
+  (better-jumper-mode 1)
+
+  (with-eval-after-load 'xref
+    (advice-add #'xref-push-marker-stack :override
+                #'better-jumper-set-jump)))
+
 (use-package eglot
   :ensure nil
   :config
@@ -283,9 +299,9 @@
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
-   '(avy consult corfu devil diff-hl diminish hydra magit multiple-cursors
-         orderless super-save vertico yasnippet yasnippet-capf zenburn-theme
-         zig-mode))
+   '(avy better-jumper consult corfu crux devil diff-hl diminish hydra magit
+         multiple-cursors orderless super-save vertico yasnippet yasnippet-capf
+         zenburn-theme zig-mode))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
