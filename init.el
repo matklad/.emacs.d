@@ -258,8 +258,8 @@
   ("M-[" . #'better-jumper-jump-backward)
   ("M-]" . #'better-jumper-jump-forward)
   :config
-  (better-jumper-mode 1)
   (diminish 'better-jumper-mode)
+  (better-jumper-mode 1)
 
   (with-eval-after-load 'xref
     (advice-add #'xref-push-marker-stack :override
@@ -274,7 +274,7 @@
                '(zig-mode . ("~/bin/zls-0.14.0"))))
 
 (use-package zig-mode
-  :enshure t
+  :ensure t
   :config
   (add-hook 'zig-mode-hook #'eglot-ensure))
 
@@ -285,8 +285,9 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.djot\\'" . markdown-mode)))
 
-(use-package paredit
-  :hook (emacs-lisp-mode . paredit-mode))
+;; (use-package paredit
+;; :ensure t
+;; :hook (emacs-lisp-mode . paredit-mode))
 
 (defun visit-init-file ()
   "Open the user's Emacs init file."
@@ -317,8 +318,8 @@
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
    '(avy better-jumper consult corfu crux devil diff-hl diminish djot-mode hydra
-         magit markdown-mode multiple-cursors orderless super-save vertico
-         yasnippet yasnippet-capf zenburn-theme zig-mode))
+         magit markdown-mode multiple-cursors orderless paredit super-save
+         vertico yasnippet yasnippet-capf zenburn-theme zig-mode))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
