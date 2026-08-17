@@ -243,7 +243,18 @@
   :ensure t
   :demand t
   :config
-  (global-set-key (kbd "M-d") #'mc/mark-next-like-this-word))
+  (global-set-key (kbd "M-d") #'mc/mark-next-like-this-word)
+  (set-face-attribute 'mc/cursor-face nil
+                      :background (face-background 'cursor)
+                      :foreground (face-foreground 'cursor))
+  (add-hook 'multiple-cursors-mode-enabled-hook
+          (lambda ()
+            (set-face-attribute 'cursor nil :background "#DFAF8F")))
+
+  (add-hook 'multiple-cursors-mode-disabled-hook
+            (lambda ()
+              (set-face-attribute 'cursor nil :background "#FFFFEF"))))
+
 (use-package zenburn-theme
   :ensure t)
 (use-package super-save
