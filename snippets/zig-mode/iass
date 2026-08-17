@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: iass
+# key: iass
+# --
+const assert = std.debug.assert;

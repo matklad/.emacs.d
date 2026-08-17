@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: istd
+# key: istd
+# --
+const std = @import("std");
