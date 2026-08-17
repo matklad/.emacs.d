@@ -266,6 +266,13 @@
     (advice-add #'xref-push-marker-stack :override
                 #'better-jumper-set-jump)))
 
+(use-package breadcrumb
+  :vc (:url "https://github.com/joaotavora/breadcrumb.git" :rev :newest)
+  :ensure t
+  :config
+  (setq-default frame-title-format
+              '((:eval (breadcrumb--header-line)))))
+
 (use-package eglot
   :ensure nil
   :config
@@ -318,9 +325,11 @@
  '(custom-safe-themes
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
-   '(avy better-jumper consult corfu crux devil diff-hl diminish djot-mode hydra
-         magit markdown-mode multiple-cursors orderless paredit super-save
-         vertico yasnippet yasnippet-capf zenburn-theme zig-mode))
+   '(avy better-jumper breadcrumb consult corfu crux devil diff-hl diminish
+         djot-mode hydra magit markdown-mode multiple-cursors orderless paredit
+         super-save vertico yasnippet yasnippet-capf zenburn-theme zig-mode))
+ '(package-vc-selected-packages
+   '((breadcrumb :url "https://github.com/joaotavora/breadcrumb.git")))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
