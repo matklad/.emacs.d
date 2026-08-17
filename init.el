@@ -141,7 +141,8 @@
 (use-package crux
   :ensure t
   :bind
-  ("C-j" . #'crux-top-join-line))
+  ("C-j" . #'crux-top-join-line)
+  ("C-c k" . #'crux-kill-other-buffers))
 
 (use-package devil
   :ensure t
