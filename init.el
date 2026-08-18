@@ -2,6 +2,7 @@
       tab-always-indent 'complete
       scroll-conservatively 0
       scroll-margin 3
+      custom-file (expand-file-name "custom.el" "~/.cache/emacs/")
       backup-directory-alist `(("." . ,(expand-file-name "backups/" "~/.cache/emacs/")))
       auto-save-file-name-transforms `((".*"  ,(expand-file-name "autosave/" "~/.cache/emacs/") t))
       mac-command-modifier 'meta
@@ -11,7 +12,7 @@
       zig-format-on-save t
       require-final-newline t
       kill-do-not-save-duplicates t
-      compilation-scroll-output t
+      compilation-scroll-output nil
       compilation-ask-about-save nil
       compilation-auto-jump-to-first-error nil
       scroll-preserve-screen-position 't)
@@ -222,6 +223,11 @@
   ("M-s u" . consult-focus-lines)
   :config)
 
+(use-package zoom
+  :ensure t
+  :config
+  (zoom-mode +1))
+
 (use-package magit
   :ensure t
   :custom
@@ -252,6 +258,7 @@
   :demand t
   :bind
   ("M-d" . #'mc/mark-next-like-this-word)
+  ("M-D" . #'mc/unmark-next-like-this)
   :config
   (set-face-attribute 'mc/cursor-face nil
                       :background (face-background 'cursor)
@@ -269,6 +276,7 @@
               (when my/cursor-before
                 (set-face-attribute 'cursor nil :background my/cursor-before)
                 (setq my/cursor-before nil)))))
+
 (use-package expand-region
   :ensure t
   :bind
@@ -417,27 +425,3 @@
   (load-theme theme t))
 
 (switch-to-theme 'zenburn)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
- '(package-selected-packages
-   '(avy better-jumper breadcrumb consult corfu crux devil diff-hl diminish
-         expand-region hydra jinx magit markdown-mode multiple-cursors orderless
-         paredit rust-mode super-save vertico yasnippet-capf zenburn-theme
-         zig-ts-mode))
- '(package-vc-selected-packages
-   '((devil :url "https://github.com/fbrosda/devil" :branch "which-key-support")
-     (breadcrumb :url "https://github.com/joaotavora/breadcrumb.git")))
- '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(put 'dired-find-alternate-file 'disabled nil)
