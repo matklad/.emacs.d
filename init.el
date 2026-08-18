@@ -305,7 +305,9 @@
 
 (use-package jinx
   :ensure t
-  :hook (emacs-startup . global-jinx-mode))
+  :hook (emacs-startup . global-jinx-mode)
+  :config
+  (diminish 'jinx-mode))
 
 (use-package eglot
   :ensure nil
@@ -313,7 +315,7 @@
   (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
   (global-set-key (kbd "C-p") #'eglot-format-buffer)
   (add-to-list 'eglot-server-programs
-               '(zig-mode . ("~/bin/zls-0.14.0"))))
+               '(zig-ts-mode . ("~/bin/zls-0.14.0"))))
 
 (defun zig-ts--function-node-p (node)
   "Return non-nil if NODE is a Zig function declaration."
@@ -380,7 +382,7 @@
 (use-package zig-ts-mode
   :vc ( :url "https://codeberg.org/meow_king/zig-ts-mode"
         :rev :newest)
-  (add-hook 'zig-mode-hook #'eglot-ensure))
+  (add-hook 'zig-ts-mode-hook #'eglot-ensure))
 
 (use-package rust-mode
   :ensure t)
@@ -427,7 +429,7 @@
    '(avy better-jumper breadcrumb consult corfu crux devil diff-hl diminish
          expand-region hydra jinx magit markdown-mode multiple-cursors orderless
          paredit rust-mode super-save vertico yasnippet-capf zenburn-theme
-         zig-mode zig-ts-mode))
+         zig-ts-mode))
  '(package-vc-selected-packages
    '((devil :url "https://github.com/fbrosda/devil" :branch "which-key-support")
      (breadcrumb :url "https://github.com/joaotavora/breadcrumb.git")))

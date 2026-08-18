@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: memu
+# key: memu
+# --
+std.mem.$1(u8, $0)
