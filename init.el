@@ -230,7 +230,12 @@
   (magit-save-repository-buffers 'dontask)
   (magit-diff-fontify-hunk 'all)
   (magit-diff-specify-hunk-foreground nil)
-  (magit-diff-use-indicator-faces t))
+  (magit-diff-use-indicator-faces t)
+  (keymap-set project-prefix-map "v" #'magit-project-status)
+  (setopt project-switch-commands
+          (assq-delete-all 'project-vc-dir project-switch-commands))
+  (add-to-list 'project-switch-commands
+               '(magit-project-status "Magit") t))
 (use-package diff-hl
   :ensure t
   :init
