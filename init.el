@@ -98,6 +98,8 @@
                            (line-beginning-position 2)))))
 (global-set-key (kbd "M-c") #'kill-ring-save-smart)
 
+(global-unset-key (kbd "C-w"))
+
 (defun move-beginning-of-line-smart (arg)
   "Move point back to indentation of beginning of line."
   (interactive "^p")
@@ -159,6 +161,7 @@
   (add-to-list 'devil-translations '(", l" . "M-g i"))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
   (add-to-list 'devil-translations '(", 2" . "C-x P c"))
+  (add-to-list 'devil-translations '(", w" . "M-q"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
   (global-set-key (kbd "C-2") #'recompile)
   (global-devil-mode 1)
@@ -264,6 +267,10 @@
               (when my/cursor-before
                 (set-face-attribute 'cursor nil :background my/cursor-before)
                 (setq my/cursor-before nil)))))
+(use-package expand-region
+  :ensure t
+  :bind
+  ("s-d" . #'er/expand-region))
 
 (use-package zenburn-theme
   :ensure t)
@@ -292,7 +299,11 @@
   :ensure t
   :config
   (setq-default frame-title-format
-              '((:eval (breadcrumb--header-line)))))
+                '((:eval (breadcrumb--header-line)))))
+
+(use-package jinx
+  :ensure t
+  :hook (emacs-startup . global-jinx-mode))
 
 (use-package eglot
   :ensure nil
@@ -350,9 +361,9 @@
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
    '(avy better-jumper breadcrumb consult corfu crux devil diff-hl diminish
-         djot-mode hydra magit markdown-mode multiple-cursors orderless paredit
-         rust-mode super-save vertico yasnippet yasnippet-capf zenburn-theme
-         zig-mode))
+         djot-mode expand-region hydra jinx magit markdown-mode multiple-cursors
+         orderless paredit rust-mode super-save vertico yasnippet yasnippet-capf
+         zenburn-theme zig-mode))
  '(package-vc-selected-packages
    '((breadcrumb :url "https://github.com/joaotavora/breadcrumb.git")))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
