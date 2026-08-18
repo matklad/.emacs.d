@@ -156,26 +156,13 @@
   (add-to-list 'devil-translations '(", 2" . "C-x P c"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
   (global-set-key (kbd "C-2") #'recompile)
-  (global-devil-mode 1))
+  (global-devil-mode 1)
+
+  (global-set-key (kbd "C-x P c") #'project-compile))
 
 (use-package hydra
   :ensure t
-  :config
-  (defhydra project-hydra (:color teal)
-    ("f" project-find-file "find file")
-    ("g" project-find-regexp "find regexp")
-    ("d" project-dired "dired")
-    ("b" project-switch-to-buffer "switch buffer")
-    ("p" project-switch-project "switch project")
-    ("k" project-kill-buffers "kill buffers")
-    ("c" project-compile "compile")
-    ("e" project-eshell "eshell")
-    ("v" project-vc-dir "vc dir")
-    ("x" project-shell-command "shell command")
-    ("X" project-async-shell-command "async shell command"))
-
-  (global-set-key (kbd "C-x p") #'project-hydra/body)
-  (global-set-key (kbd "C-x P c") #'project-compile))
+  :config)
 
 (use-package avy
   :ensure t
@@ -231,11 +218,16 @@
   (magit-diff-fontify-hunk 'all)
   (magit-diff-specify-hunk-foreground nil)
   (magit-diff-use-indicator-faces t)
-  (keymap-set project-prefix-map "v" #'magit-project-status)
-  (setopt project-switch-commands
-          (assq-delete-all 'project-vc-dir project-switch-commands))
-  (add-to-list 'project-switch-commands
-               '(magit-project-status "Magit") t))
+  :config
+  (defun project-switch-project-magit ()
+    ""
+    (interactive)
+    (let ((default-directory (project-prompt-project-dir))
+          (display-buffer-overriding-action '((display-buffer-same-window))))
+      (magit-project-status)))
+
+  (keymap-set project-prefix-map "p" #'project-switch-project-magit))
+
 (use-package diff-hl
   :ensure t
   :init
@@ -302,6 +294,9 @@
   :config
   (add-hook 'zig-mode-hook #'eglot-ensure))
 
+(use-package rust-mode
+  :ensure t)
+
 (use-package markdown-mode
   :ensure t
   :custom
@@ -343,7 +338,8 @@
  '(package-selected-packages
    '(avy better-jumper breadcrumb consult corfu crux devil diff-hl diminish
          djot-mode hydra magit markdown-mode multiple-cursors orderless paredit
-         super-save vertico yasnippet yasnippet-capf zenburn-theme zig-mode))
+         rust-mode super-save vertico yasnippet yasnippet-capf zenburn-theme
+         zig-mode))
  '(package-vc-selected-packages
    '((breadcrumb :url "https://github.com/joaotavora/breadcrumb.git")))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
