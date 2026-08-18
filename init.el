@@ -152,7 +152,9 @@
   ("C-c k" . #'crux-kill-other-buffers))
 
 (use-package devil
-  :ensure t
+  :vc (:url "https://github.com/fbrosda/devil"
+            :branch "which-key-support"
+            :rev :newest)
   :demand t
   :config
   (diminish 'devil-mode)
@@ -313,9 +315,71 @@
   (add-to-list 'eglot-server-programs
                '(zig-mode . ("~/bin/zls-0.14.0"))))
 
-(use-package zig-mode
-  :ensure t
-  :config
+(defun zig-ts--function-node-p (node)
+  "Return non-nil if NODE is a Zig function declaration."
+  (equal (treesit-node-type node) "function_declaration"))
+
+(defun zig-ts--contains-function-p (node)
+  "Return non-nil if NODE contains a nested function declaration."
+  (let ((i 0)
+        found)
+    (while (and (< i (treesit-node-child-count node))
+                (not found))
+      (let ((child (treesit-node-child node i)))
+        (when child
+          (setq found
+                (or (zig-ts--function-node-p child)
+                    (zig-ts--contains-function-p child)))))
+      (setq i (1+ i)))
+    found))
+
+(defun zig-ts--leaf-functions (node)
+  "Return leaf function declarations below NODE."
+  (let (result)
+    (when (and (zig-ts--function-node-p node)
+               (not (zig-ts--contains-function-p node)))
+      (setq result (list node)))
+    (let ((i 0))
+      (while (< i (treesit-node-child-count node))
+        (let ((child (treesit-node-child node i)))
+          (when child
+            (setq result
+                  (append result (zig-ts--leaf-functions child)))))
+        (setq i (1+ i))))
+    result))
+
+(defun zig-ts-fold-leaf-functions ()
+  "Fold leaf Zig functions, or unfold everything if anything is folded."
+  (interactive)
+  (unless (derived-mode-p 'zig-ts-mode)
+    (user-error "This command requires zig-ts-mode"))
+  (unless hs-minor-mode
+    (hs-minor-mode 1))
+  (save-excursion
+    (let ((overlays (overlays-in (point-min) (point-max)))
+          (folded nil))
+      (while (and overlays (not folded))
+        (when (overlay-get (car overlays) 'hs)
+          (setq folded t))
+        (setq overlays (cdr overlays)))
+      (if folded
+          (hs-show-all)
+        (let ((functions
+               (zig-ts--leaf-functions
+                (treesit-buffer-root-node 'zig))))
+          (while functions
+            (let ((body (treesit-node-child-by-field-name
+                         (car functions) "body")))
+              (when body
+                (goto-char (treesit-node-start body))
+                (hs-hide-block)))
+            (setq functions (cdr functions))))))))
+
+(global-set-key (kbd "C-S-f") #'zig-ts-fold-leaf-functions)
+
+(use-package zig-ts-mode
+  :vc ( :url "https://codeberg.org/meow_king/zig-ts-mode"
+        :rev :newest)
   (add-hook 'zig-mode-hook #'eglot-ensure))
 
 (use-package rust-mode
@@ -361,11 +425,12 @@
    '("745f8c882e6edae45476e93f7b47c5bd4a4dc98c65494672ddcd291359935a3a" default))
  '(package-selected-packages
    '(avy better-jumper breadcrumb consult corfu crux devil diff-hl diminish
-         djot-mode expand-region hydra jinx magit markdown-mode multiple-cursors
-         orderless paredit rust-mode super-save vertico yasnippet yasnippet-capf
-         zenburn-theme zig-mode))
+         expand-region hydra jinx magit markdown-mode multiple-cursors orderless
+         paredit rust-mode super-save vertico yasnippet-capf zenburn-theme
+         zig-mode zig-ts-mode))
  '(package-vc-selected-packages
-   '((breadcrumb :url "https://github.com/joaotavora/breadcrumb.git")))
+   '((devil :url "https://github.com/fbrosda/devil" :branch "which-key-support")
+     (breadcrumb :url "https://github.com/joaotavora/breadcrumb.git")))
  '(safe-local-variable-values '((eglot-server-programs (zig-mode "~/bin/zls-0.14.0")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
