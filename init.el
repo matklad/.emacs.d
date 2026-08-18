@@ -65,6 +65,11 @@
 (global-set-key (kbd "C-o") #'consult-buffer)
 (global-set-key (kbd "M-/") #'comment-line)
 (global-set-key (kbd "s-/") #'hippie-expand)
+(global-set-key (kbd "C-x 3")
+                (lambda ()
+                  (interactive)
+                  (split-window-right)
+                  (other-window 1)))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -201,7 +206,7 @@
   ("M-g i" . consult-imenu)
   ("M-g I" . consult-imenu-multi)
   ;; M-s bindings in `search-map'
-  ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+  ("M-s d" . consult-find) ;; Alternative: consult-fd
   ("M-s c" . consult-locate)
   ("M-s g" . consult-ripgrep)
   ("M-s G" . consult-git-grep)
@@ -209,7 +214,8 @@
   ("M-s l" . consult-line)
   ("M-s L" . consult-line-multi)
   ("M-s k" . consult-keep-lines)
-  ("M-s u" . consult-focus-lines))
+  ("M-s u" . consult-focus-lines)
+  :config)
 
 (use-package magit
   :ensure t
@@ -239,18 +245,25 @@
 (use-package multiple-cursors
   :ensure t
   :demand t
+  :bind
+  ("M-d" . #'mc/mark-next-like-this-word)
   :config
-  (global-set-key (kbd "M-d") #'mc/mark-next-like-this-word)
   (set-face-attribute 'mc/cursor-face nil
                       :background (face-background 'cursor)
                       :foreground (face-foreground 'cursor))
+
+  (defvar my/cursor-before nil)
   (add-hook 'multiple-cursors-mode-enabled-hook
-          (lambda ()
-            (set-face-attribute 'cursor nil :background "#DFAF8F")))
+            (lambda ()
+              (unless my/cursor-before
+                (setq my/cursor-before (face-background 'cursor))
+                (set-face-attribute 'cursor nil :background "#DFAF8F"))))
 
   (add-hook 'multiple-cursors-mode-disabled-hook
             (lambda ()
-              (set-face-attribute 'cursor nil :background "#FFFFEF"))))
+              (when my/cursor-before
+                (set-face-attribute 'cursor nil :background my/cursor-before)
+                (setq my/cursor-before nil)))))
 
 (use-package zenburn-theme
   :ensure t)
