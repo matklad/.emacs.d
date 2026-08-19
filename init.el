@@ -19,7 +19,8 @@
 
 (setq-default indent-tabs-mode nil
 	          tab-width 4
-	          fill-column 80)
+	          fill-column 80
+              display-fill-column-indicator-column 100)
 
 (add-to-list 'default-frame-alist '(font . "JetBrains Mono-16"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -39,6 +40,7 @@
 (savehist-mode +1)
 (column-number-mode +1)
 (which-key-mode +1)
+(global-display-fill-column-indicator-mode +1)
 
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
@@ -398,7 +400,11 @@
 (use-package zig-ts-mode
   :vc ( :url "https://codeberg.org/meow_king/zig-ts-mode"
         :rev :newest)
-  (add-hook 'zig-ts-mode-hook #'eglot-ensure))
+  (add-hook 'zig-ts-mode-hook #'eglot-ensure)
+  :config
+  (font-lock-add-keywords
+   'zig-ts-mode
+   '(("\\<assert\\>" . font-lock-function-name-face))))
 
 (use-package rust-mode
   :ensure t)
