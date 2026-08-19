@@ -66,6 +66,10 @@
 (global-set-key (kbd "C-o") #'consult-buffer)
 (global-set-key (kbd "M-/") #'comment-line)
 (global-set-key (kbd "s-/") #'hippie-expand)
+(global-unset-key (kbd "C-w"))
+(global-unset-key (kbd "C-x m"))
+(global-unset-key (kbd "C-e"))
+
 (global-set-key (kbd "C-x 3")
                 (lambda ()
                   (interactive)
@@ -98,8 +102,6 @@
       (copy-region-as-kill (line-beginning-position)
                            (line-beginning-position 2)))))
 (global-set-key (kbd "M-c") #'kill-ring-save-smart)
-
-(global-unset-key (kbd "C-w"))
 
 (defun move-beginning-of-line-smart (arg)
   "Move point back to indentation of beginning of line."
@@ -251,6 +253,8 @@
   :ensure t
   :init
   (global-diff-hl-mode)
+  :bind
+  ("C-e r" . #'diff-hl-revert-hunk)
   :config
   (diff-hl-flydiff-mode)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
@@ -261,6 +265,8 @@
   :bind
   ("M-d" . #'mc/mark-next-like-this-word)
   ("M-D" . #'mc/unmark-next-like-this)
+  ("C-e c" . #'mc/edit-lines)
+
   :config
   (set-face-attribute 'mc/cursor-face nil
                       :background (face-background 'cursor)
