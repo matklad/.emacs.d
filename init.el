@@ -163,13 +163,14 @@
   (add-to-list 'devil-translations '(", ." . "M-."))
   (add-to-list 'devil-translations '(", l" . "M-g i"))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
-  (add-to-list 'devil-translations '(", 2" . "C-x P c"))
   (add-to-list 'devil-translations '(", w" . "M-q"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
-  (global-set-key (kbd "C-2") #'recompile)
   (global-devil-mode 1)
 
-  (global-set-key (kbd "C-x P c") #'project-compile))
+  (add-to-list 'devil-translations '(", 2" . "C-x P c"))
+  (global-set-key (kbd "C-x P c") #'project-compile)
+
+  )
 
 (use-package hydra
   :ensure t
@@ -211,17 +212,18 @@
   ("C-x b" . consult-buffer)
   ("M-g i" . consult-imenu)
   ("M-g I" . consult-imenu-multi)
-  ;; M-s bindings in `search-map'
-  ("M-s d" . consult-find) ;; Alternative: consult-fd
+  ("M-s d" . consult-fd)
   ("M-s c" . consult-locate)
-  ("M-s g" . consult-ripgrep)
-  ("M-s G" . consult-git-grep)
-  ("M-s r" . consult-ripgrep)
   ("M-s l" . consult-line)
   ("M-s L" . consult-line-multi)
   ("M-s k" . consult-keep-lines)
   ("M-s u" . consult-focus-lines)
   :config)
+
+(use-package deadgrep
+  :ensure t
+  :bind
+  ("C-S-s" . #'deadgrep))
 
 (use-package zoom
   :ensure t
