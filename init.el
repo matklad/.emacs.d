@@ -439,3 +439,6 @@
   (load-theme theme t))
 
 (switch-to-theme 'zenburn)
+
+(when (file-exists-p custom-file)
+  (load custom-file))
