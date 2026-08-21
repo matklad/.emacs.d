@@ -162,7 +162,9 @@
   (treemacs-width 80)
   (treemacs-position 'right)
   :config
-  (treemacs-fringe-indicator-mode 'always))
+  (treemacs-fringe-indicator-mode 'always)
+  (set-face-attribute 'treemacs-window-background-face nil
+                      :background (face-background 'default)))
 
 (use-package devil
   :vc (:url "https://github.com/fbrosda/devil"
@@ -183,7 +185,8 @@
   (global-set-key (kbd "C-, 2") #'project-compile)
 
   (add-to-list 'devil-translations '(", 1" . "C-, 1"))
-  (global-set-key (kbd "C-, 1") #'treemacs))
+  (global-set-key (kbd "C-, 1") #'treemacs)
+  (add-to-list 'devil-translations '(", 3" . "C-x g")))
 
 (use-package hydra
   :ensure t
