@@ -156,6 +156,14 @@
   ("C-j" . #'crux-top-join-line)
   ("C-c k" . #'crux-kill-other-buffers))
 
+(use-package treemacs
+  :ensure t
+  :custom
+  (treemacs-width 80)
+  (treemacs-position 'right)
+  :config
+  (treemacs-fringe-indicator-mode 'always))
+
 (use-package devil
   :vc (:url "https://github.com/fbrosda/devil"
             :branch "which-key-support"
@@ -171,10 +179,11 @@
   (add-to-list 'devil-repeatable-keys '("%k x `"))
   (global-devil-mode 1)
 
-  (add-to-list 'devil-translations '(", 2" . "C-x P c"))
-  (global-set-key (kbd "C-x P c") #'project-compile)
+  (add-to-list 'devil-translations '(", 2" . "C-, 2"))
+  (global-set-key (kbd "C-, 2") #'project-compile)
 
-  )
+  (add-to-list 'devil-translations '(", 1" . "C-, 1"))
+  (global-set-key (kbd "C-, 1") #'treemacs))
 
 (use-package hydra
   :ensure t
@@ -442,3 +451,4 @@
 
 (when (file-exists-p custom-file)
   (load custom-file))
+(put 'dired-find-alternate-file 'disabled nil)
