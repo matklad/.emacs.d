@@ -181,6 +181,9 @@
   (add-to-list 'devil-repeatable-keys '("%k x `"))
   (global-devil-mode 1)
 
+  (add-to-list 'devil-translations '(", a" . "C-, a"))
+  (global-set-key (kbd "C-, a") #'embark-act)
+
   (add-to-list 'devil-translations '(", 2" . "C-, 2"))
   (global-set-key (kbd "C-, 2") #'project-compile)
 
@@ -222,6 +225,14 @@
   (define-key corfu-map (kbd "TAB") #'yas-expand-or-corfu-complete)
   (define-key corfu-map (kbd "<tab>") #'yas-expand-or-corfu-complete))
 
+(use-package marginalia
+  :ensure t
+  :init
+  (marginalia-mode))
+
+(use-package embark
+  :ensure t)
+
 (use-package consult
   :ensure t
   :bind
@@ -235,6 +246,9 @@
   ("M-s k" . consult-keep-lines)
   ("M-s u" . consult-focus-lines)
   :config)
+
+(use-package embark-consult
+  :ensure t)
 
 (use-package deadgrep
   :ensure t
