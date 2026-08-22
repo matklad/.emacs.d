@@ -15,7 +15,8 @@
       compilation-scroll-output nil
       compilation-ask-about-save nil
       compilation-auto-jump-to-first-error nil
-      scroll-preserve-screen-position 't)
+      scroll-preserve-screen-position 't
+      sentence-end-double-space nil)
 
 (setq-default indent-tabs-mode nil
 	          tab-width 4
@@ -71,6 +72,8 @@
 (global-unset-key (kbd "C-w"))
 (global-unset-key (kbd "C-x m"))
 (global-unset-key (kbd "C-e"))
+(global-unset-key (kbd "s-t"))
+
 
 (global-set-key (kbd "C-x 3")
                 (lambda ()
