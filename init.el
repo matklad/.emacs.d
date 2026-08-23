@@ -525,6 +525,15 @@
   :config
   (persistent-scratch-setup-default))
 
+(define-derived-mode peg-mode fundamental-mode "PEG"
+  "Major mode for PEG grammar files."
+  (setq-local imenu-generic-expression
+              '(("->"
+                 "^\\([[:alnum:]_]+\\)[ \t\n]*<-[ \t]*"
+                 1))))
+
+(add-to-list 'auto-mode-alist '("\\.peg\\'" . peg-mode))
+
 ;; (use-package paredit
 ;; :ensure t
 ;; :hook (emacs-lisp-mode . paredit-mode))
