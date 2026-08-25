@@ -136,10 +136,10 @@
   :ensure t)
 (require 'diminish)
 
- (use-package vertico
-   :ensure t
-   :init
-   (vertico-mode))
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
 
 (use-package orderless
   :ensure t
@@ -320,7 +320,9 @@
   ("s-d" . #'er/expand-region))
 
 (use-package zenburn-theme
-  :ensure t)
+  :ensure t
+  :config)
+
 (use-package super-save
   :ensure t
   :demand t
@@ -466,6 +468,10 @@
   (load-theme theme t))
 
 (switch-to-theme 'zenburn)
+(zenburn-with-color-variables
+    (custom-theme-set-faces
+     'zenburn
+     `(region ((t (:background ,zenburn-green-4))))))
 
 (when (file-exists-p custom-file)
   (load custom-file))
