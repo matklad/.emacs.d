@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq ring-bell-function #'ignore
       tab-always-indent 'complete
       scroll-conservatively 0
@@ -47,14 +48,14 @@
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
-(global-set-key (kbd "M-z") #'undo)
+(global-set-key (kbd "M-z") #'undo-only)
+(global-set-key (kbd "M-S-z") #'undo-redo)
 (global-set-key (kbd "M-v") #'yank)
 (global-set-key (kbd "C-c x") #'execute-extended-command)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 (global-set-key (kbd "M-<left>")  #'move-beginning-of-line)
 (global-set-key (kbd "M-<right>") #'end-of-line)
-(global-set-key (kbd "M-<backspace>") #'kill-whole-line)
 (global-set-key (kbd "M-<kp-delete>") #'kill-line)
 
 (global-set-key (kbd "s-<left>")  #'backward-word)
@@ -64,7 +65,6 @@
 
 (global-set-key (kbd "M-<up>") #'beginning-of-buffer)
 (global-set-key (kbd "M-<down>") #'end-of-buffer)
-(global-set-key (kbd "C-k") #'kill-whole-line)
 
 (global-set-key (kbd "C-o") #'consult-buffer)
 (global-set-key (kbd "M-/") #'comment-line)
@@ -73,7 +73,7 @@
 (global-unset-key (kbd "C-x m"))
 (global-unset-key (kbd "C-e"))
 (global-unset-key (kbd "s-t"))
-
+(global-unset-key (kbd "C-z"))
 
 (global-set-key (kbd "C-x 3")
                 (lambda ()
@@ -82,13 +82,6 @@
                   (other-window 1)))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-(defun open-line-below ()
-  "Open new line below"
-  (interactive)
-  (end-of-line)
-  (newline-and-indent))
-(global-set-key (kbd "M-<return>") #'open-line-below)
 
 (defun kill-region-smart ()
   "Cut the active region, or the current line if no region is active."
@@ -143,21 +136,26 @@
   :ensure t)
 (require 'diminish)
 
-(use-package vertico
-  :ensure t
-  :init
-  (vertico-mode))
+ (use-package vertico
+   :ensure t
+   :init
+   (vertico-mode))
 
 (use-package orderless
   :ensure t
   :custom
-  (completion-styles '(orderless basic)))
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-pcm-leading-wildcard t))
 
 (use-package crux
   :ensure t
   :bind
   ("C-j" . #'crux-top-join-line)
-  ("C-c k" . #'crux-kill-other-buffers))
+  ("C-c k" . #'crux-kill-other-buffers)
+  ("M-<return>" . #'crux-smart-open-line)
+  ("M-<backspace>" . #'crux-kill-whole-line)
+  ("C-k".  #'crux-smart-kill-line))
 
 (use-package treemacs
   :ensure t
