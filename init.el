@@ -155,7 +155,23 @@
   ("C-c k" . #'crux-kill-other-buffers)
   ("M-<return>" . #'crux-smart-open-line)
   ("M-<backspace>" . #'crux-kill-whole-line)
-  ("C-k".  #'crux-smart-kill-line))
+  ("C-k".  #'crux-kill-whole-line))
+
+(use-package zop-to-char
+  :ensure t)
+
+(defun my/yank-indent-advice (&rest _args)
+  "Indent yanked text if in a programming mode and not too large."
+  (when (and (not (member major-mode '(conf-mode coffee-mode haml-mode
+                                        python-mode slim-mode yaml-mode
+                                        yaml-ts-mode)))
+             (derived-mode-p 'prog-mode)
+             (<= (- (region-end) (region-beginning)) 1000))
+    (let ((transient-mark-mode nil))
+      (indent-region (region-beginning) (region-end) nil))))
+
+(advice-add 'yank :after #'my/yank-indent-advice)
+(advice-add 'yank-pop :after #'my/yank-indent-advice)
 
 (use-package treemacs
   :ensure t
@@ -181,6 +197,12 @@
   (add-to-list 'devil-translations '(", w" . "M-q"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
   (global-devil-mode 1)
+
+  (add-to-list 'devil-translations '(", z" . "C-, z"))
+  (global-set-key (kbd "C-, z") #'zop-to-char)
+
+  (add-to-list 'devil-translations '(", Z" . "C-, Z"))
+  (global-set-key (kbd "C-, Z") #'zop-up-to-char)
 
   (add-to-list 'devil-translations '(", a" . "C-, a"))
   (global-set-key (kbd "C-, a") #'embark-act)
@@ -353,6 +375,8 @@
 (use-package jinx
   :ensure t
   :hook (emacs-startup . global-jinx-mode)
+  :bind
+  ("C-e t" . #'jinx-correct)
   :config
   (diminish 'jinx-mode))
 
