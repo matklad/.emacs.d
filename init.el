@@ -421,6 +421,7 @@
   :ensure nil
   :config
   (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
+  (add-to-list 'eglot-ignored-server-capabilities :codeActionProvider)
   (global-set-key (kbd "C-p") #'eglot-format-buffer)
   (add-to-list 'eglot-server-programs
                '(zig-ts-mode . ("~/bin/zls-0.14.0"))))
