@@ -263,6 +263,23 @@
 
 (use-package consult
   :ensure t
+  :init
+  (defun my/consult-to-project-find-file ()
+    "Switch from `consult-buffer` to `project-find-file`, keeping the query."
+    (interactive)
+    (let ((query (minibuffer-contents)))
+      (add-hook
+       'minibuffer-exit-hook
+       (lambda ()
+         (run-at-time
+          0 nil
+          (lambda ()
+            (minibuffer-with-setup-hook
+                (lambda ()
+                  (insert query))
+              (project-find-file)))))
+       nil t)
+      (abort-recursive-edit)))
   :bind
   ("C-o" . consult-buffer)
   ("C-S-o" . find-file)
@@ -274,37 +291,10 @@
   ("M-s L" . consult-line-multi)
   ("M-s k" . consult-keep-lines)
   ("M-s u" . consult-focus-lines)
-  :init
-  (setq consult-narrow-key "<")
-  :config
-  (defvar consult-source-project-all-file
-    `(:name "Project File"
-            :narrow ?p
-            :hidden t
-            :category file
-            :face consult-file
-            :state consult--file-state
-            :enabled ,(lambda ()
-                        (project-current))
-            :items ,(lambda ()
-                      (when-let ((proj (project-current)))
-                        (let ((root (project-root proj)))
-                          (mapcar (lambda (file)
-                                    (file-relative-name file root))
-                                  (project-files proj)))))
-            :action ,(lambda (file)
-                       (when-let ((proj (project-current)))
-                         (find-file (expand-file-name file
-                                                      (project-root proj))))))
-    "Consult source for all files in the current project.")
-  (setq consult-buffer-sources
-        (mapcar (lambda (src)
-                  (if (eq src 'consult-source-project-buffer-hidden)
-                      'consult-source-project-all-file
-                    src))
-                consult-buffer-sources)))
+  (:map vertico-map
+        ("C-o" . my/consult-to-project-find-file)))
 
-(use-package embark-consult
+ (use-package embark-consult
   :ensure t)
 
 (use-package deadgrep
