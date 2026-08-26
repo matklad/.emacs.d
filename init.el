@@ -292,6 +292,7 @@
   (magit-diff-fontify-hunk 'all)
   (magit-diff-specify-hunk-foreground nil)
   (magit-diff-use-indicator-faces t)
+  (magit-prefer-remote-upstream t)
   :config
   (defun project-switch-project-magit ()
     ""
