@@ -17,11 +17,13 @@
       compilation-ask-about-save nil
       compilation-auto-jump-to-first-error nil
       scroll-preserve-screen-position 't
-      sentence-end-double-space nil)
+      sentence-end-double-space nil
+      use-short-answers t
+      inhibit-startup-screen t)
 
 (setq-default indent-tabs-mode nil
-	          tab-width 4
-	          fill-column 80
+              tab-width 4
+              fill-column 80
               display-fill-column-indicator-column 100)
 
 (use-package diminish
@@ -49,7 +51,6 @@
 (global-display-fill-column-indicator-mode +1)
 
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (diminish 'hs-minor-mode)
 
@@ -84,8 +85,6 @@
                   (interactive)
                   (split-window-right)
                   (other-window 1)))
-
-(defalias 'yes-or-no-p 'y-or-n-p)
 
 (defun kill-region-smart ()
   "Cut the active region, or the current line if no region is active."
@@ -176,6 +175,14 @@
 
 (advice-add 'yank :after #'my/yank-indent-advice)
 (advice-add 'yank-pop :after #'my/yank-indent-advice)
+
+(use-package whitespace-cleanup-mode
+  :ensure t
+  :custom
+  (whitespace-cleanup-mode-preserve-point t)
+  (whitespace-cleanup-mode-only-if-initially-clean nil)
+  :config
+  (global-whitespace-cleanup-mode +1))
 
 (use-package treemacs
   :ensure t
@@ -499,6 +506,11 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.djot\\'" . markdown-mode)))
 
+(use-package persistent-scratch
+  :ensure t
+  :config
+  (persistent-scratch-setup-default))
+
 ;; (use-package paredit
 ;; :ensure t
 ;; :hook (emacs-lisp-mode . paredit-mode))
@@ -508,24 +520,26 @@
   (interactive)
   (find-file user-init-file))
 
-(defun switch-to-theme (theme)
-  "Disable all enabled themes and load THEME."
-  (interactive
-   (list
-    (intern
-     (completing-read
-      "Theme: "
-      (mapcar #'symbol-name (custom-available-themes))
-      nil t))))
+(load-theme 'whiteboard t t)
+(load-theme 'zenburn t t)
 
-  (mapc #'disable-theme custom-enabled-themes)
-  (load-theme theme t))
+(custom-theme-set-faces
+ 'whiteboard
+ '(hl-line ((t (:background "gainsboro")))))
 
-(switch-to-theme 'zenburn)
 (zenburn-with-color-variables
-    (custom-theme-set-faces
-     'zenburn
-     `(region ((t (:background ,zenburn-green-4))))))
+  (custom-theme-set-faces
+   'zenburn
+   `(region ((t (:background ,zenburn-green-4))))))
+
+(defun switch-theme (theme)
+  (interactive
+   (list (intern (completing-read "Theme: " (mapcar #'symbol-name (custom-available-themes))))))
+  (mapc #'disable-theme custom-enabled-themes)
+  (enable-theme theme))
+
+(switch-theme 'zenburn)
+
 
 (when (file-exists-p custom-file)
   (load custom-file))
