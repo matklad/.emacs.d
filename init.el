@@ -71,7 +71,6 @@
 (global-set-key (kbd "M-<up>") #'beginning-of-buffer)
 (global-set-key (kbd "M-<down>") #'end-of-buffer)
 
-(global-set-key (kbd "C-o") #'consult-buffer)
 (global-set-key (kbd "M-/") #'comment-line)
 (global-set-key (kbd "s-/") #'hippie-expand)
 (global-unset-key (kbd "C-w"))
@@ -161,6 +160,10 @@
 (use-package zop-to-char
   :ensure t)
 
+(use-package rainbow-delimiters
+  :ensure t
+  :hook (emacs-lisp-mode . rainbow-delimiters-mode))
+
 (defun my/yank-indent-advice (&rest _args)
   "Indent yanked text if in a programming mode and not too large."
   (when (and (not (member major-mode '(conf-mode coffee-mode haml-mode
@@ -208,12 +211,13 @@
   (add-to-list 'devil-translations '(", a" . "C-, a"))
   (global-set-key (kbd "C-, a") #'embark-act)
 
-  (add-to-list 'devil-translations '(", 2" . "C-, 2"))
-  (global-set-key (kbd "C-, 2") #'project-compile)
-
   (add-to-list 'devil-translations '(", 1" . "C-, 1"))
   (global-set-key (kbd "C-, 1") #'treemacs)
-  (add-to-list 'devil-translations '(", 3" . "C-x g")))
+  (add-to-list 'devil-translations '(", 2" . "C-, 2"))
+  (global-set-key (kbd "C-, 2") #'project-compile)
+  (add-to-list 'devil-translations '(", 3" . "C-x g"))
+  (add-to-list 'devil-translations '(", 6" . "C-, 6"))
+  (global-set-key (kbd "C-, 6") #'visit-init-file))
 
 (use-package hydra
   :ensure t
@@ -260,7 +264,8 @@
 (use-package consult
   :ensure t
   :bind
-  ("C-x b" . consult-buffer)
+  ("C-o" . consult-buffer)
+  ("C-S-o" . find-file)
   ("M-g i" . consult-imenu)
   ("M-g I" . consult-imenu-multi)
   ("M-s d" . consult-fd)
@@ -269,7 +274,35 @@
   ("M-s L" . consult-line-multi)
   ("M-s k" . consult-keep-lines)
   ("M-s u" . consult-focus-lines)
-  :config)
+  :init
+  (setq consult-narrow-key "<")
+  :config
+  (defvar consult-source-project-all-file
+    `(:name "Project File"
+            :narrow ?p
+            :hidden t
+            :category file
+            :face consult-file
+            :state consult--file-state
+            :enabled ,(lambda ()
+                        (project-current))
+            :items ,(lambda ()
+                      (when-let ((proj (project-current)))
+                        (let ((root (project-root proj)))
+                          (mapcar (lambda (file)
+                                    (file-relative-name file root))
+                                  (project-files proj)))))
+            :action ,(lambda (file)
+                       (when-let ((proj (project-current)))
+                         (find-file (expand-file-name file
+                                                      (project-root proj))))))
+    "Consult source for all files in the current project.")
+  (setq consult-buffer-sources
+        (mapcar (lambda (src)
+                  (if (eq src 'consult-source-project-buffer-hidden)
+                      'consult-source-project-all-file
+                    src))
+                consult-buffer-sources)))
 
 (use-package embark-consult
   :ensure t)
