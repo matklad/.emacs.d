@@ -24,6 +24,10 @@
 	          fill-column 80
               display-fill-column-indicator-column 100)
 
+(use-package diminish
+  :ensure t)
+(require 'diminish)
+
 (add-to-list 'default-frame-alist '(font . "JetBrains Mono-16"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
@@ -47,6 +51,7 @@
 (add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'prog-mode-hook #'hs-minor-mode)
+(diminish 'hs-minor-mode)
 
 (global-set-key (kbd "M-z") #'undo-only)
 (global-set-key (kbd "M-S-z") #'undo-redo)
@@ -132,10 +137,6 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-(use-package diminish
-  :ensure t)
-(require 'diminish)
-
 (use-package vertico
   :ensure t
   :init
@@ -188,8 +189,8 @@
             :branch "which-key-support"
             :rev :newest)
   :demand t
+  :diminish devil-mode
   :config
-  (diminish 'devil-mode)
   (add-to-list 'devil-translations '(", m x" . "C-c x"))
   (add-to-list 'devil-translations '(", ." . "M-."))
   (add-to-list 'devil-translations '(", l" . "M-g i"))
@@ -233,9 +234,9 @@
 (use-package yasnippet
   :ensure t
   :demand t
+  :diminish yas-minor-mode
   :config
-  (yas-global-mode +1)
-  (diminish 'yas-minor-mode))
+  (yas-global-mode +1))
 
 (defun yas-expand-or-corfu-complete ()
   "Prefer Yasnippet expansion over Corfu completion."
@@ -280,6 +281,7 @@
 
 (use-package zoom
   :ensure t
+  :diminish zoom-mode
   :config
   (zoom-mode +1))
 
@@ -299,6 +301,9 @@
       (magit-project-status)))
 
   (keymap-set project-prefix-map "p" #'project-switch-project-magit))
+
+(use-package git-link
+  :ensure t)
 
 (use-package diff-hl
   :ensure t
@@ -348,17 +353,18 @@
 (use-package super-save
   :ensure t
   :demand t
+  :diminish super-save-mode
   :config
-  (super-save-mode +1)
-  (diminish 'super-save-mode))
+  (super-save-mode +1))
 
 (use-package better-jumper
   :ensure t
   :bind
   ("M-[" . #'better-jumper-jump-backward)
   ("M-]" . #'better-jumper-jump-forward)
+  :diminish better-jumper-mode
+  :diminish better-jumper-local-mode
   :config
-  (diminish 'better-jumper-mode)
   (better-jumper-mode 1)
 
   (with-eval-after-load 'xref
