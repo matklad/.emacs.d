@@ -536,7 +536,8 @@
   (interactive
    (list (intern (completing-read "Theme: " (mapcar #'symbol-name (custom-available-themes))))))
   (mapc #'disable-theme custom-enabled-themes)
-  (enable-theme theme))
+  (enable-theme theme)
+  (set-frame-parameter nil 'ns-appearance (if (eq theme 'zenburn) 'dark 'light)))
 
 (switch-theme 'zenburn)
 
