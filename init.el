@@ -13,13 +13,11 @@
       zig-format-on-save t
       require-final-newline t
       kill-do-not-save-duplicates t
-      compilation-scroll-output nil
-      compilation-ask-about-save nil
-      compilation-auto-jump-to-first-error nil
       scroll-preserve-screen-position 't
       sentence-end-double-space nil
       use-short-answers t
-      inhibit-startup-screen t)
+      inhibit-startup-screen t
+      isearch-allow-motion t)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
@@ -50,7 +48,6 @@
 (which-key-mode +1)
 (global-display-fill-column-indicator-mode +1)
 
-(add-hook 'compilation-filter-hook #'ansi-color-compilation-filter)
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (diminish 'hs-minor-mode)
 
@@ -74,11 +71,13 @@
 
 (global-set-key (kbd "M-/") #'comment-line)
 (global-set-key (kbd "s-/") #'hippie-expand)
+(global-set-key (kbd "M-o") #'other-window)
 (global-unset-key (kbd "C-w"))
 (global-unset-key (kbd "C-x m"))
 (global-unset-key (kbd "C-e"))
 (global-unset-key (kbd "s-t"))
 (global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-x o"))
 
 (global-set-key (kbd "C-x 3")
                 (lambda ()
@@ -134,6 +133,15 @@
 
 (unless package-archive-contents
   (package-refresh-contents))
+
+(use-package compile
+  :custom
+  (compilation-scroll-output nil)
+  (compilation-ask-about-save nil)
+  (compilation-auto-jump-to-first-error nil)
+  :hook (compilation-filter-hook . ansi-color-compilation-filter)
+  :config
+  (define-key compilation-mode-map (kbd "C-o") nil))
 
 (use-package vertico
   :ensure t
@@ -224,6 +232,10 @@
   (global-set-key (kbd "C-, 2") #'project-compile)
   (add-to-list 'devil-translations '(", 3" . "C-x g"))
   (add-to-list 'devil-translations '(", 6" . "C-, 6"))
+  (defun visit-init-file ()
+    "Open the user's Emacs init file."
+    (interactive)
+    (find-file user-init-file))
   (global-set-key (kbd "C-, 6") #'visit-init-file))
 
 (use-package hydra
@@ -377,10 +389,6 @@
   :bind
   ("s-d" . #'er/expand-region))
 
-(use-package zenburn-theme
-  :ensure t
-  :config)
-
 (use-package super-save
   :ensure t
   :demand t
@@ -516,23 +524,6 @@
 ;; :ensure t
 ;; :hook (emacs-lisp-mode . paredit-mode))
 
-(defun visit-init-file ()
-  "Open the user's Emacs init file."
-  (interactive)
-  (find-file user-init-file))
-
-(load-theme 'whiteboard t t)
-(load-theme 'zenburn t t)
-
-(custom-theme-set-faces
- 'whiteboard
- '(hl-line ((t (:background "gainsboro")))))
-
-(zenburn-with-color-variables
-  (custom-theme-set-faces
-   'zenburn
-   `(region ((t (:background ,zenburn-green-4))))))
-
 (defun switch-theme (theme)
   (interactive
    (list (intern (completing-read "Theme: " (mapcar #'symbol-name (custom-available-themes))))))
@@ -540,8 +531,20 @@
   (enable-theme theme)
   (set-frame-parameter nil 'ns-appearance (if (eq theme 'zenburn) 'dark 'light)))
 
-(switch-theme 'zenburn)
+(load-theme 'whiteboard t t)
+(custom-theme-set-faces
+ 'whiteboard
+ '(hl-line ((t (:background "gainsboro")))))
 
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn t t))
+
+(enable-theme 'zenburn)
+(custom-theme-set-faces
+ 'zenburn
+ '(region ((t (:background "#3F5F3F")))))
 
 (when (file-exists-p custom-file)
   (load custom-file))
