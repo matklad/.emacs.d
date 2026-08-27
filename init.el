@@ -146,7 +146,8 @@
 (use-package vertico
   :ensure t
   :init
-  (vertico-mode))
+  (vertico-mode)
+  (vertico-reverse-mode))
 
 (use-package orderless
   :ensure t
@@ -228,14 +229,17 @@
 
   (add-to-list 'devil-translations '(", 1" . "C-, 1"))
   (global-set-key (kbd "C-, 1") #'treemacs)
+
   (add-to-list 'devil-translations '(", 2" . "C-, 2"))
   (global-set-key (kbd "C-, 2") #'project-compile)
+
   (add-to-list 'devil-translations '(", 3" . "C-x g"))
-  (add-to-list 'devil-translations '(", 6" . "C-, 6"))
+
   (defun visit-init-file ()
     "Open the user's Emacs init file."
     (interactive)
     (find-file user-init-file))
+  (add-to-list 'devil-translations '(", 6" . "C-, 6"))
   (global-set-key (kbd "C-, 6") #'visit-init-file))
 
 (use-package hydra
