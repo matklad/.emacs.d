@@ -1,14 +1,15 @@
 ;; -*- lexical-binding: t; -*-
 (setq ring-bell-function #'ignore
       tab-always-indent 'complete
+      scroll-preserve-screen-position t
       scroll-conservatively 0
       scroll-margin 3
+      scroll-error-top-bottom t
       custom-file (expand-file-name "custom.el" "~/.cache/emacs/")
       backup-directory-alist `(("." . ,(expand-file-name "backups/" "~/.cache/emacs/")))
       auto-save-file-name-transforms `((".*"  ,(expand-file-name "autosave/" "~/.cache/emacs/") t))
       mac-command-modifier 'meta
       mac-option-modifier 'super
-      scroll-error-top-bottom t
       completion-styles '(flex)
       zig-format-on-save t
       require-final-newline t
@@ -47,6 +48,7 @@
 (column-number-mode +1)
 (which-key-mode +1)
 (global-display-fill-column-indicator-mode +1)
+(pixel-scroll-precision-mode +1)
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (diminish 'hs-minor-mode)
@@ -146,8 +148,7 @@
 (use-package vertico
   :ensure t
   :init
-  (vertico-mode)
-  (vertico-reverse-mode))
+  (vertico-mode))
 
 (use-package orderless
   :ensure t
@@ -546,9 +547,21 @@
   (load-theme 'zenburn t t))
 
 (enable-theme 'zenburn)
-(custom-theme-set-faces
- 'zenburn
- '(region ((t (:background "#3F5F3F")))))
+(zenburn-with-color-variables
+  (custom-theme-set-faces
+   'zenburn
+   '(region ((t (:background "#3F5F3F"))))
+
+   `(magit-diff-removed ((t (:background ,zenburn-red-6))))
+   `(magit-diff-removed-highlight ((t (:background ,zenburn-red-5))))
+   `(magit-diff-removed-indicator ((t (:background unspecified))))
+
+   `(magit-diff-added ((t (:background ,zenburn-green-5))))
+   `(magit-diff-added-highlight ((t (:background ,zenburn-green-4))))
+   `(magit-diff-added-indicator ((t (:background unspecified)))))
+
+   )
+
 
 (when (file-exists-p custom-file)
   (load custom-file))
