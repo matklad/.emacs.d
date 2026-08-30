@@ -194,15 +194,22 @@
   :config
   (global-whitespace-cleanup-mode +1))
 
-(use-package treemacs
+(use-package dired-subtree
   :ensure t
-  :custom
-  (treemacs-width 80)
-  (treemacs-position 'right)
+  :after dired
+  :bind
+  (:map dired-mode-map
+        ("TAB" . dired-subtree-toggle))
+  :config)
+
+(use-package dired
   :config
-  (treemacs-fringe-indicator-mode 'always)
-  (set-face-attribute 'treemacs-window-background-face nil
-                      :background (face-background 'default)))
+  :hook (dired-mode-hook . dired-hide-details-mode)
+  :config
+  (defun dired-project ()
+    "Open Dired for the current project root in another window."
+    (interactive)
+    (dired-other-window (project-root (project-current t)))))
 
 (use-package devil
   :vc (:url "https://github.com/fbrosda/devil"
@@ -229,7 +236,7 @@
   (global-set-key (kbd "C-, a") #'embark-act)
 
   (add-to-list 'devil-translations '(", 1" . "C-, 1"))
-  (global-set-key (kbd "C-, 1") #'treemacs)
+  (global-set-key (kbd "C-, 1") #'dired-project)
 
   (add-to-list 'devil-translations '(", 2" . "C-, 2"))
   (global-set-key (kbd "C-, 2") #'project-compile)
