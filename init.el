@@ -411,6 +411,8 @@
 
 (use-package expand-region
   :ensure t
+  :custom
+  (expand-region-contract-fast-key "D")
   :bind
   ("s-d" . #'er/expand-region))
 
