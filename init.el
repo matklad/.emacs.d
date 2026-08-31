@@ -76,7 +76,7 @@
 
 (global-set-key (kbd "M-/") #'comment-line)
 (global-set-key (kbd "s-/") #'hippie-expand)
-(global-set-key (kbd "M-o") #'other-window)
+(global-set-key (kbd "C-<tab>") #'other-window)
 (global-unset-key (kbd "C-w"))
 (global-unset-key (kbd "C-x m"))
 (global-unset-key (kbd "C-e"))
@@ -450,7 +450,7 @@
   :hook (emacs-startup . global-jinx-mode)
   :bind
   ("C-e t" . #'jinx-correct)
-  :config
+  :config)
 
 (use-package eglot
   :ensure nil
