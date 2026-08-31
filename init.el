@@ -20,7 +20,8 @@
       inhibit-startup-screen t
       isearch-allow-motion t
       warning-minimum-level :error
-      comment-empty-lines t)
+      comment-empty-lines t
+      make-backup-files nil)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
@@ -35,7 +36,6 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-;; (add-to-list 'default-frame-alist '(undecorated . t))
 
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -171,6 +171,12 @@
 
 (use-package zop-to-char
   :ensure t)
+
+(use-package shrink-whitspace
+  :vc (:url "https://github.com/jcpetkovich/shrink-whitespace.el"
+            :rev :newest)
+  :ensure t
+  :bind ("s-SPC" . shrink-whitespace))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -417,11 +423,11 @@
 
 (use-package better-jumper
   :ensure t
+  :diminish better-jumper-mode
+  :diminish better-jumper-local-mode
   :bind
   ("M-[" . #'better-jumper-jump-backward)
   ("M-]" . #'better-jumper-jump-forward)
-  :diminish better-jumper-mode
-  :diminish better-jumper-local-mode
   :config
   (better-jumper-mode 1)
 
@@ -438,11 +444,11 @@
 
 (use-package jinx
   :ensure t
+  :diminish jinx-mode
   :hook (emacs-startup . global-jinx-mode)
   :bind
   ("C-e t" . #'jinx-correct)
   :config
-  (diminish 'jinx-mode))
 
 (use-package eglot
   :ensure nil
@@ -532,7 +538,7 @@
   :custom
   (markdown-fontify-code-blocks-natively t)
   :config
-  (add-to-list 'auto-mode-alist '("\\.djot\\'" . markdown-mode)))
+  (add-to-list 'auto-mode-alist '("\\.dj\\'" . markdown-mode)))
 
 (use-package persistent-scratch
   :ensure t
