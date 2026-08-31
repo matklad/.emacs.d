@@ -56,6 +56,7 @@
 (global-set-key (kbd "M-z") #'undo-only)
 (global-set-key (kbd "M-S-z") #'undo-redo)
 (global-set-key (kbd "M-v") #'yank)
+(global-set-key (kbd "M-a") #'mark-whole-buffer)
 (global-set-key (kbd "C-c x") #'execute-extended-command)
 (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
@@ -197,6 +198,8 @@
 (use-package dired-subtree
   :ensure t
   :after dired
+  :custom
+  (dired-subtree-use-backgrounds nil)
   :bind
   (:map dired-mode-map
         ("TAB" . dired-subtree-toggle))
