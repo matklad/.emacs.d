@@ -217,7 +217,8 @@
   :config
   :hook (dired-mode-hook . dired-hide-details-mode)
   :bind (:map dired-mode-map
-              ("RET" . dired-find-file-other-window))
+              ("<return>" . dired-find-file-other-window)
+              ("S-<return>" . dired-display-file))
   :config
   (defun dired-project ()
     "Open Dired for the current project root in another window."
