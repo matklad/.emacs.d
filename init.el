@@ -18,7 +18,9 @@
       sentence-end-double-space nil
       use-short-answers t
       inhibit-startup-screen t
-      isearch-allow-motion t)
+      isearch-allow-motion t
+      warning-minimum-level :error
+      comment-empty-lines t)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
@@ -208,6 +210,8 @@
 (use-package dired
   :config
   :hook (dired-mode-hook . dired-hide-details-mode)
+  :bind (:map dired-mode-map
+              ("RET" . dired-find-file-other-window))
   :config
   (defun dired-project ()
     "Open Dired for the current project root in another window."
