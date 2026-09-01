@@ -539,6 +539,11 @@
 ;; :ensure t
 ;; :hook (emacs-lisp-mode . paredit-mode))
 
+(use-package ultra-scroll
+  :ensure t
+  :config
+  (ultra-scroll-mode +1))
+
 (defun switch-theme (theme)
   (interactive
    (list (intern (completing-read "Theme: " (mapcar #'symbol-name (custom-available-themes))))))
