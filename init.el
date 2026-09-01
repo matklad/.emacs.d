@@ -76,7 +76,7 @@
 (keymap-global-set "M-/" #'comment-line)
 (keymap-global-set "s-/" #'hippie-expand)
 (keymap-global-set "C-<tab>" #'other-window)
-(keymap-global-set "s-<space>" #'cycle-spacing)
+(keymap-global-set "s-SPC" #'cycle-spacing)
 
 (keymap-global-unset "C-w")
 (keymap-global-unset "C-x m")
@@ -152,7 +152,7 @@
   ("M-<return>" . #'crux-smart-open-line)
   ("M-<backspace>" . #'crux-kill-whole-line)
   ("C-k" . #'crux-kill-whole-line)
-  ("<remap> <move>" . #'crux-move-beginning-of-line))
+  ("<remap> <move-beginning-of-line>" . #'crux-move-beginning-of-line))
 
 (use-package zop-to-char
   :ensure t)
@@ -449,46 +449,41 @@
   (add-to-list 'eglot-server-programs
                '(zig-ts-mode . ("~/bin/zls-0.14.0"))))
 
+
+(defun zig-ts--test-node-p (node)
+  "Return non-nil if NODE is a Zig function declaration."
+  (equal (treesit-node-type node) "test_declaration"))
+
 (defun zig-ts--function-node-p (node)
   "Return non-nil if NODE is a Zig function declaration."
   (equal (treesit-node-type node) "function_declaration"))
 
 (defun zig-ts--contains-function-p (node)
   "Return non-nil if NODE contains a nested function declaration."
-  (let ((i 0)
-        found)
-    (while (and (< i (treesit-node-child-count node))
-                (not found))
-      (let ((child (treesit-node-child node i)))
-        (when child
-          (setq found
-                (or (zig-ts--function-node-p child)
-                    (zig-ts--contains-function-p child)))))
-      (setq i (1+ i)))
-    found))
+  (seq-some (lambda (child)
+              (or (zig-ts--function-node-p child)
+                  (zig-ts--contains-function-p child)))
+            (treesit-node-children node)))
 
-(defun zig-ts--leaf-functions (node)
+(defun zig-ts--leaf-function-node-p (node)
+  (and (zig-ts--function-node-p node)
+       (not (zig-ts--contains-function-p node))))
+
+(defun zig-ts--leaf-functions-and-tests (node)
   "Return leaf function declarations below NODE."
-  (let (result)
-    (when (and (zig-ts--function-node-p node)
-               (not (zig-ts--contains-function-p node)))
-      (setq result (list node)))
-    (let ((i 0))
-      (while (< i (treesit-node-child-count node))
-        (let ((child (treesit-node-child node i)))
-          (when child
-            (setq result
-                  (append result (zig-ts--leaf-functions child)))))
-        (setq i (1+ i))))
-    result))
+  (if (or (zig-ts--test-node-p node)
+          (zig-ts--leaf-function-node-p node))
+      (list node)
 
-(defun zig-ts-fold-leaf-functions ()
+    (apply #'append
+           (mapcar #'zig-ts--leaf-functions-and-tests
+                   (treesit-node-children node)))))
+
+(defun my/fold-functions ()
   "Fold leaf Zig functions, or unfold everything if anything is folded."
   (interactive)
   (unless (derived-mode-p 'zig-ts-mode)
     (user-error "This command requires zig-ts-mode"))
-  (unless hs-minor-mode
-    (hs-minor-mode 1))
   (save-excursion
     (let ((overlays (overlays-in (point-min) (point-max)))
           (folded nil))
@@ -498,18 +493,13 @@
         (setq overlays (cdr overlays)))
       (if folded
           (hs-show-all)
-        (let ((functions
-               (zig-ts--leaf-functions
-                (treesit-buffer-root-node 'zig))))
-          (while functions
-            (let ((body (treesit-node-child-by-field-name
-                         (car functions) "body")))
-              (when body
-                (goto-char (treesit-node-start body))
-                (hs-hide-block)))
-            (setq functions (cdr functions))))))))
+        (dolist (f
+                 (zig-ts--leaf-functions-and-tests (treesit-buffer-root-node 'zig)))
+          (when-let ((body (treesit-node-child f -1 )))
+            (goto-char (treesit-node-start body))
+            (hs-hide-block)))))))
 
-(global-set-key (kbd "C-S-f") #'zig-ts-fold-leaf-functions)
+(keymap-global-set "C-S-f" #'my/fold-functions)
 
 (use-package zig-ts-mode
   :vc ( :url "https://codeberg.org/meow_king/zig-ts-mode"
