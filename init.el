@@ -340,6 +340,15 @@
   (magit-diff-specify-hunk-foreground nil)
   (magit-diff-use-indicator-faces t)
   (magit-prefer-remote-upstream t)
+
+  :bind (:map magit-hunk-section-map
+              ("<return>" . (lambda ()
+                              (interactive)
+                              (magit-diff-visit-file t)))
+              ("S-<return>" . (lambda ()
+                                (interactive)
+                                (magit-diff-visit-file nil))))
+
   :config
   (defun project-switch-project-magit ()
     ""
