@@ -1,9 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 (setq ring-bell-function #'ignore
       tab-always-indent 'complete
-      scroll-preserve-screen-position t
-      scroll-conservatively 0
-      scroll-margin 3
+      scroll-preserve-screen-position 1
+      scroll-conservatively 100000
+      scroll-margin 0
       scroll-error-top-bottom t
       custom-file (expand-file-name "custom.el" "~/.cache/emacs/")
       backup-directory-alist `(("." . ,(expand-file-name "backups/" "~/.cache/emacs/")))
@@ -14,7 +14,6 @@
       zig-format-on-save t
       require-final-newline t
       kill-do-not-save-duplicates t
-      scroll-preserve-screen-position 't
       sentence-end-double-space nil
       use-short-answers t
       inhibit-startup-screen t
