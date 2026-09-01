@@ -344,10 +344,7 @@
   :bind (:map magit-hunk-section-map
               ("<return>" . (lambda ()
                               (interactive)
-                              (magit-diff-visit-file t)))
-              ("S-<return>" . (lambda ()
-                                (interactive)
-                                (magit-diff-visit-file nil))))
+                              (magit-diff-visit-file t))))
 
   :config
   (defun project-switch-project-magit ()
