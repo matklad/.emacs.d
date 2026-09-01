@@ -2,8 +2,8 @@
 (setq ring-bell-function #'ignore
       tab-always-indent 'complete
       scroll-preserve-screen-position 1
-      scroll-conservatively 100000
-      scroll-margin 0
+      scroll-conservatively 10
+      scroll-margin 15
       scroll-error-top-bottom t
       custom-file (expand-file-name "custom.el" "~/.cache/emacs/")
       backup-directory-alist `(("." . ,(expand-file-name "backups/" "~/.cache/emacs/")))
@@ -58,6 +58,7 @@
 (keymap-global-set "M-z" #'undo-only)
 (keymap-global-set "M-S-z" #'undo-redo)
 (keymap-global-set "M-v" #'yank)
+(keymap-global-set "M-V" #'yank-pop)
 (keymap-global-set "M-a" #'mark-whole-buffer)
 (keymap-global-set "C-c x" #'execute-extended-command)
 
