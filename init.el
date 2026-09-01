@@ -10,7 +10,6 @@
       auto-save-file-name-transforms `((".*"  ,(expand-file-name "autosave/" "~/.cache/emacs/") t))
       mac-command-modifier 'meta
       mac-option-modifier 'super
-      completion-styles '(flex)
       zig-format-on-save t
       require-final-newline t
       kill-do-not-save-duplicates t
@@ -20,7 +19,8 @@
       isearch-allow-motion t
       warning-minimum-level :error
       comment-empty-lines t
-      make-backup-files nil)
+      make-backup-files nil
+      list-matching-lines-default-context-lines 2)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
@@ -54,36 +54,38 @@
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (diminish 'hs-minor-mode)
 
-(global-set-key (kbd "M-z") #'undo-only)
-(global-set-key (kbd "M-S-z") #'undo-redo)
-(global-set-key (kbd "M-v") #'yank)
-(global-set-key (kbd "M-a") #'mark-whole-buffer)
-(global-set-key (kbd "C-c x") #'execute-extended-command)
-(define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+(keymap-set key-translation-map "ESC" "C-g")
+(keymap-global-set "M-z" #'undo-only)
+(keymap-global-set "M-S-z" #'undo-redo)
+(keymap-global-set "M-v" #'yank)
+(keymap-global-set "M-a" #'mark-whole-buffer)
+(keymap-global-set "C-c x" #'execute-extended-command)
 
-(global-set-key (kbd "M-<left>")  #'move-beginning-of-line)
-(global-set-key (kbd "M-<right>") #'end-of-line)
-(global-set-key (kbd "M-<kp-delete>") #'kill-line)
+(keymap-global-set "M-<left>"  #'move-beginning-of-line)
+(keymap-global-set "M-<right>" #'end-of-line)
+(keymap-global-set "M-<kp-delete>" #'kill-line)
 
-(global-set-key (kbd "s-<left>")  #'backward-word)
-(global-set-key (kbd "s-<right>") #'forward-word)
-(global-set-key (kbd "s-<backspace>") #'backward-kill-word)
-(global-set-key (kbd "s-<kp-delete>") #'kill-word)
+(keymap-global-set "s-<left>"  #'backward-word)
+(keymap-global-set "s-<right>" #'forward-word)
+(keymap-global-set "s-<backspace>" #'backward-kill-word)
+(keymap-global-set "s-<kp-delete>" #'kill-word)
 
-(global-set-key (kbd "M-<up>") #'beginning-of-buffer)
-(global-set-key (kbd "M-<down>") #'end-of-buffer)
+(keymap-global-set "M-<up>" #'beginning-of-buffer)
+(keymap-global-set "M-<down>" #'end-of-buffer)
 
-(global-set-key (kbd "M-/") #'comment-line)
-(global-set-key (kbd "s-/") #'hippie-expand)
-(global-set-key (kbd "C-<tab>") #'other-window)
-(global-unset-key (kbd "C-w"))
-(global-unset-key (kbd "C-x m"))
-(global-unset-key (kbd "C-e"))
-(global-unset-key (kbd "s-t"))
-(global-unset-key (kbd "C-z"))
-(global-unset-key (kbd "C-x o"))
+(keymap-global-set "M-/" #'comment-line)
+(keymap-global-set "s-/" #'hippie-expand)
+(keymap-global-set "C-<tab>" #'other-window)
+(keymap-global-set "s-<space>" #'cycle-spacing)
 
-(global-set-key (kbd "C-x 3")
+(keymap-global-unset "C-w")
+(keymap-global-unset "C-x m")
+(keymap-global-unset "C-e")
+(keymap-global-unset "s-t")
+(keymap-global-unset "C-z")
+(keymap-global-unset "C-x o")
+
+(keymap-global-set "C-x 3"
                 (lambda ()
                   (interactive)
                   (split-window-right)
@@ -95,7 +97,7 @@
   (if (use-region-p)
       (call-interactively #'kill-region)
     (kill-whole-line)))
-(global-set-key (kbd "M-x") #'kill-region-smart)
+(keymap-global-set "M-x" #'kill-region-smart)
 
 (defun kill-ring-save-smart ()
   (interactive)
@@ -105,31 +107,14 @@
       (beginning-of-line)
       (copy-region-as-kill (line-beginning-position)
                            (line-beginning-position 2)))))
-(global-set-key (kbd "M-c") #'kill-ring-save-smart)
-
-(defun move-beginning-of-line-smart (arg)
-  "Move point back to indentation of beginning of line."
-  (interactive "^p")
-  (setq arg (or arg 1))
-
-  ;; Move lines first
-  (when (/= arg 1)
-    (let ((line-move-visual nil))
-      (forward-line (1- arg))))
-
-  (let ((orig-point (point)))
-    (back-to-indentation)
-    (when (= orig-point (point))
-      (move-beginning-of-line 1))))
-(global-set-key [remap move-beginning-of-line]
-                'move-beginning-of-line-smart)
+(keymap-global-set "M-c" #'kill-ring-save-smart)
 
 (defun toggle-fold ()
   (interactive)
   (save-excursion
     (end-of-line)
     (hs-toggle-hiding)))
-(global-set-key (kbd "C-f") #'toggle-fold)
+(keymap-global-set "C-f" #'toggle-fold)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -143,7 +128,7 @@
   (compilation-scroll-output nil)
   (compilation-ask-about-save nil)
   (compilation-auto-jump-to-first-error nil)
-  :hook (compilation-filter-hook . ansi-color-compilation-filter)
+  :hook (compilation-filter . ansi-color-compilation-filter)
   :config
   (define-key compilation-mode-map (kbd "C-o") nil))
 
@@ -166,16 +151,11 @@
   ("C-c k" . #'crux-kill-other-buffers)
   ("M-<return>" . #'crux-smart-open-line)
   ("M-<backspace>" . #'crux-kill-whole-line)
-  ("C-k".  #'crux-kill-whole-line))
+  ("C-k" . #'crux-kill-whole-line)
+  ("<remap> <move>" . #'crux-move-beginning-of-line))
 
 (use-package zop-to-char
   :ensure t)
-
-(use-package shrink-whitspace
-  :vc (:url "https://github.com/jcpetkovich/shrink-whitespace.el"
-            :rev :newest)
-  :ensure t
-  :bind ("s-SPC" . shrink-whitespace))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -214,7 +194,7 @@
 
 (use-package dired
   :config
-  :hook (dired-mode-hook . dired-hide-details-mode)
+  :hook (dired-mode . dired-hide-details-mode)
   :bind (:map dired-mode-map
               ("<return>" . dired-find-file-other-window)
               ("S-<return>" . dired-display-file))
@@ -368,7 +348,9 @@
           (display-buffer-overriding-action '((display-buffer-same-window))))
       (magit-project-status)))
 
-  (keymap-set project-prefix-map "p" #'project-switch-project-magit))
+  (keymap-set project-prefix-map "p" #'project-switch-project-magit)
+  (keymap-set magit-status-mode-map "C-<tab>" #'other-window)
+  (keymap-set magit-status-mode-map "C-c <tab>" #'magit-section-cycle))
 
 (use-package git-link
   :ensure t)
@@ -526,7 +508,7 @@
 (use-package zig-ts-mode
   :vc ( :url "https://codeberg.org/meow_king/zig-ts-mode"
         :rev :newest)
-  (add-hook 'zig-ts-mode-hook #'eglot-ensure)
+  :hook (zig-ts-mode . eglot-ensure)
   :config
   (font-lock-add-keywords
    'zig-ts-mode
