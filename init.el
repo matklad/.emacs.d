@@ -27,9 +27,7 @@
               fill-column 80
               display-fill-column-indicator-column 100)
 
-(use-package diminish
-  :ensure t)
-(require 'diminish)
+(setq mode-line-collapse-minor-modes '(not))
 
 (add-to-list 'default-frame-alist '(font . "JetBrains Mono-16"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -52,7 +50,6 @@
 (pixel-scroll-precision-mode +1)
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
-(diminish 'hs-minor-mode)
 
 (keymap-set key-translation-map "ESC" "C-g")
 (keymap-global-set "M-z" #'undo-only)
@@ -210,7 +207,6 @@
             :branch "which-key-support"
             :rev :newest)
   :demand t
-  :diminish devil-mode
   :config
   (add-to-list 'devil-translations '(", m x" . "C-c x"))
   (add-to-list 'devil-translations '(", ." . "M-."))
@@ -221,19 +217,19 @@
   (global-devil-mode 1)
 
   (add-to-list 'devil-translations '(", z" . "C-, z"))
-  (global-set-key (kbd "C-, z") #'zop-to-char)
+  (keymap-global-set "C-, z" #'zop-to-char)
 
   (add-to-list 'devil-translations '(", Z" . "C-, Z"))
-  (global-set-key (kbd "C-, Z") #'zop-up-to-char)
+  (keymap-global-set "C-, Z" #'zop-up-to-char)
 
   (add-to-list 'devil-translations '(", a" . "C-, a"))
-  (global-set-key (kbd "C-, a") #'embark-act)
+  (keymap-global-set "C-, a" #'embark-act)
 
   (add-to-list 'devil-translations '(", 1" . "C-, 1"))
-  (global-set-key (kbd "C-, 1") #'dired-project)
+  (keymap-global-set "C-, 1" #'dired-project)
 
   (add-to-list 'devil-translations '(", 2" . "C-, 2"))
-  (global-set-key (kbd "C-, 2") #'project-compile)
+  (keymap-global-set "C-, 2" #'project-compile)
 
   (add-to-list 'devil-translations '(", 3" . "C-x g"))
 
@@ -263,7 +259,6 @@
 (use-package yasnippet
   :ensure t
   :demand t
-  :diminish yas-minor-mode
   :config
   (yas-global-mode +1))
 
@@ -329,7 +324,6 @@
 
 (use-package zoom
   :ensure t
-  :diminish zoom-mode
   :config
   (zoom-mode +1))
 
@@ -379,6 +373,8 @@
   ("M-d" . #'mc/mark-next-like-this-word)
   ("M-D" . #'mc/unmark-next-like-this)
   ("C-e c" . #'mc/edit-lines)
+  (:map mc/keymap ("M-v" . nil))
+
 
   :config
   (set-face-attribute 'mc/cursor-face nil
@@ -408,14 +404,11 @@
 (use-package super-save
   :ensure t
   :demand t
-  :diminish super-save-mode
   :config
   (super-save-mode +1))
 
 (use-package better-jumper
   :ensure t
-  :diminish better-jumper-mode
-  :diminish better-jumper-local-mode
   :bind
   ("M-[" . #'better-jumper-jump-backward)
   ("M-]" . #'better-jumper-jump-forward)
@@ -435,7 +428,6 @@
 
 (use-package jinx
   :ensure t
-  :diminish jinx-mode
   :hook (emacs-startup . global-jinx-mode)
   :bind
   ("C-e t" . #'jinx-correct)
