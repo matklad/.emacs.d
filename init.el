@@ -20,7 +20,8 @@
       warning-minimum-level :error
       comment-empty-lines t
       make-backup-files nil
-      list-matching-lines-default-context-lines 2)
+      list-matching-lines-default-context-lines 2
+      create-lockfiles nil)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
@@ -336,10 +337,15 @@
   (magit-diff-use-indicator-faces t)
   (magit-prefer-remote-upstream t)
 
-  :bind (:map magit-hunk-section-map
+  :bind
+  (:map magit-hunk-section-map
               ("<return>" . (lambda ()
                               (interactive)
                               (magit-diff-visit-file t))))
+  (:map magit-diff-section-map
+        ("<return>" . (lambda ()
+                        (interactive)
+                        (magit-diff-visit-file t))))
 
   :config
   (defun project-switch-project-magit ()
