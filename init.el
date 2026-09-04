@@ -21,7 +21,8 @@
       comment-empty-lines t
       make-backup-files nil
       list-matching-lines-default-context-lines 2
-      create-lockfiles nil)
+      create-lockfiles nil
+      shell-command-prompt-show-cwd t)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
@@ -59,6 +60,7 @@
 (keymap-global-set "M-V" #'yank-pop)
 (keymap-global-set "M-a" #'mark-whole-buffer)
 (keymap-global-set "C-c x" #'execute-extended-command)
+(keymap-global-set "C-x k" #'kill-current-buffer)
 
 (keymap-global-set "M-<left>"  #'move-beginning-of-line)
 (keymap-global-set "M-<right>" #'end-of-line)
@@ -124,7 +126,7 @@
 
 (use-package compile
   :custom
-  (compilation-scroll-output nil)
+  (compilation-scroll-output 'first-error)
   (compilation-ask-about-save nil)
   (compilation-auto-jump-to-first-error nil)
   :hook (compilation-filter . ansi-color-compilation-filter)
@@ -186,6 +188,7 @@
   :after dired
   :custom
   (dired-subtree-use-backgrounds nil)
+  (dired-auto-revert-buffer t)
   :bind
   (:map dired-mode-map
         ("TAB" . dired-subtree-toggle))
@@ -357,6 +360,7 @@
 
   (keymap-set project-prefix-map "p" #'project-switch-project-magit)
   (keymap-set magit-status-mode-map "C-<tab>" #'other-window)
+  (keymap-set magit-revision-mode-map "C-<tab>" #'other-window)
   (keymap-set magit-status-mode-map "C-c <tab>" #'magit-section-cycle))
 
 (use-package git-link
