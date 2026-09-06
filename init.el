@@ -218,7 +218,8 @@
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
   (add-to-list 'devil-translations '(", w" . "M-q"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
-  (global-devil-mode 1)
+  (setq devil-repeatable-keys
+        (assoc-delete-all "%k s" devil-repeatable-keys))
 
   (add-to-list 'devil-translations '(", z" . "C-, z"))
   (keymap-global-set "C-, z" #'zop-to-char)
@@ -509,9 +510,9 @@
         :rev :newest)
   :hook (zig-ts-mode . eglot-ensure)
   :config
-  (font-lock-add-keywords
-   'zig-ts-mode
-   '(("\\<assert\\>" . font-lock-function-name-face))))
+  (font-lock-add-keywhords 'zig-ts-mode
+   '(("\\<assert\\>" . font-lock-function-name-face)
+     ("\\<unreachable\\>" . font-lock-function-name-face))))
 
 (use-package rust-mode
   :ensure t)
