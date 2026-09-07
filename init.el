@@ -361,8 +361,9 @@
       (magit-project-status)))
 
   (keymap-set project-prefix-map "p" #'project-switch-project-magit)
-  (keymap-set magit-status-mode-map "C-<tab>" #'other-window)
-  (keymap-set magit-revision-mode-map "C-<tab>" #'other-window)
+  (keymap-unset magit-status-mode-map "C-<tab>")
+  (keymap-unset magit-revision-mode-map "C-<tab>")
+  (keymap-unset magit-diff-mode-map "C-<tab>")
   (keymap-set magit-status-mode-map "C-c <tab>" #'magit-section-cycle))
 
 (use-package git-link
