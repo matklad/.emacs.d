@@ -305,6 +305,7 @@
   ("C-O" . find-file)
   ("M-V" . consult-yankg-pop)
   ("C-, l" . consult-imenu)
+  ("C-s" . consult-line)
   (:map vertico-map
         ("C-o" . my/consult-to-project-find-file)))
 
