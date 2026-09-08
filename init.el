@@ -132,7 +132,9 @@
 
 (use-package orderless
   :custom
-  (completion-styles '(orderless basic)))
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-pcm-leading-wildcard t))
 
 (use-package corfu
   :init
@@ -302,8 +304,8 @@
       (abort-recursive-edit)))
   :bind
   ("C-o" . consult-buffer)
-  ("C-O" . find-file)
-  ("M-V" . consult-yankg-pop)
+  ("C-S-o" . find-file)
+  ("M-S-v" . consult-yankg-pop)
   ("C-, l" . consult-imenu)
   ("C-s" . consult-line)
   (:map vertico-map
