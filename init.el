@@ -1,45 +1,58 @@
 ;; -*- lexical-binding: t; -*-
-(setq ring-bell-function #'ignore
-      tab-always-indent 'complete
-      scroll-preserve-screen-position 1
-      scroll-conservatively 10
-      scroll-margin 15
-      scroll-error-top-bottom t
-      custom-file (expand-file-name "custom.el" "~/.cache/emacs/")
-      backup-directory-alist `(("." . ,(expand-file-name "backups/" "~/.cache/emacs/")))
-      auto-save-file-name-transforms `((".*"  ,(expand-file-name "autosave/" "~/.cache/emacs/") t))
-      mac-command-modifier 'meta
-      mac-option-modifier 'super
-      zig-format-on-save t
-      require-final-newline t
-      kill-do-not-save-duplicates t
-      sentence-end-double-space nil
-      use-short-answers t
-      inhibit-startup-screen t
-      isearch-allow-motion t
-      warning-minimum-level :error
-      comment-empty-lines t
-      make-backup-files nil
-      list-matching-lines-default-context-lines 2
-      create-lockfiles nil
-      shell-command-prompt-show-cwd t)
+(with-eval-after-load 'package
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+
+(setopt mac-command-modifier 'meta
+        mac-option-modifier 'super
+        ring-bell-function #'ignore
+        use-short-answers t
+        save-interprogram-paste-before-kill t
+        kill-do-not-save-duplicates t
+        ffap-machine-p-known 'reject
+        window-combination-resize t
+        sentence-end-double-space nil
+        tab-always-indent 'complete
+        line-number-mode t
+        column-number-mode t
+        mode-line-collapse-minor-modes t
+        x-underline-at-descent-line nil
+        switch-to-buffer-obey-display-actions t
+        show-paren-delay 0
+        show-paren-mode t
+        show-paren-style 'expression
+        show-paren-context-when-offscreen 'overlay
+        scroll-preserve-screen-position 1
+        scroll-conservatively 10
+        scroll-margin 15
+        scroll-error-top-bottom t
+        custom-file (expand-file-name "custom.el" "~/.cache/emacs/")
+        backup-directory-alist `(("." . ,(expand-file-name "backups/" "~/.cache/emacs/")))
+        auto-save-file-name-transforms `((".*"  ,(expand-file-name "autosave/" "~/.cache/emacs/") t))
+        make-backup-files nil
+        create-lockfiles nil
+        require-final-newline t
+        inhibit-startup-screen t
+        warning-minimum-level :error
+        comment-empty-lines t
+        list-matching-lines-default-context-lines 2
+        shell-command-prompt-show-cwd t)
+
+(setq-default bidi-paragraph-direction 'left-to-right)
+(setq bidi-inhibit-bpa t)
 
 (setq-default indent-tabs-mode nil
               tab-width 4
               fill-column 80
               display-fill-column-indicator-column 100)
 
-(setq mode-line-collapse-minor-modes '(not))
-
+(global-auto-revert-mode t)
+(savehist-mode +1)
 (blink-cursor-mode -1)
 (delete-selection-mode +1)
 (electric-pair-mode +1)
 (recentf-mode +1)
 (global-hl-line-mode +1)
 (auto-save-visited-mode +1)
-(global-auto-revert-mode t)
-(savehist-mode +1)
-(column-number-mode +1)
 (which-key-mode +1)
 (global-display-fill-column-indicator-mode +1)
 (pixel-scroll-precision-mode +1)
@@ -50,7 +63,6 @@
 (keymap-global-set "M-z" #'undo-only)
 (keymap-global-set "M-S-z" #'undo-redo)
 (keymap-global-set "M-v" #'yank)
-(keymap-global-set "M-V" #'yank-pop)
 (keymap-global-set "M-a" #'mark-whole-buffer)
 (keymap-global-set "C-c x" #'execute-extended-command)
 (keymap-global-set "C-x k" #'kill-current-buffer)
@@ -110,12 +122,36 @@
     (hs-toggle-hiding)))
 (keymap-global-set "C-f" #'toggle-fold)
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
+(use-package vertico
+  :init
+  (vertico-mode))
 
-(unless package-archive-contents
-  (package-refresh-contents))
+(use-package marginalia
+  :config
+  (marginalia-mode))
+
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic)))
+
+(use-package corfu
+  :init
+  (global-corfu-mode +1)
+  :config
+  (corfu-auto t))
+
+(use-package isearch
+  :ensure nil
+  :bind
+  (:map isearch-mode-map
+        ("s-d" . isearch-forward-thing-at-point))
+  :custom
+  (lazy-count-prefix-format "(%s/%s) ")
+  (isearch-lazy-count t)
+  (isearch-allow-motion t)
+  (isearch-allow-scroll t)
+  (isearch-repeat-on-direction-change t)
+  (isearch-wrap-pause 'no-ding))
 
 (use-package compile
   :custom
@@ -125,16 +161,6 @@
   :hook (compilation-filter . ansi-color-compilation-filter)
   :config
   (define-key compilation-mode-map (kbd "C-o") nil))
-
-(use-package vertico
-  :init
-  (vertico-mode))
-
-(use-package orderless
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles partial-completion))))
-  (completion-pcm-leading-wildcard t))
 
 (use-package crux
   :bind
@@ -150,6 +176,7 @@
 
 (use-package rainbow-delimiters
   :hook (emacs-lisp-mode . rainbow-delimiters-mode))
+
 
 (defun my/yank-indent-advice (&rest _args)
   "Indent yanked text if in a programming mode and not too large."
@@ -203,7 +230,7 @@
   :config
   (add-to-list 'devil-translations '(", m x" . "C-c x"))
   (add-to-list 'devil-translations '(", ." . "M-."))
-  (add-to-list 'devil-translations '(", l" . "M-g i"))
+  (add-to-list 'devil-translations '(", l" . "C-, l"))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
   (add-to-list 'devil-translations '(", w" . "M-q"))
   (add-to-list 'devil-repeatable-keys '("%k x `"))
@@ -216,9 +243,6 @@
 
   (add-to-list 'devil-translations '(", Z" . "C-, Z"))
   (keymap-global-set "C-, Z" #'zop-up-to-char)
-
-  (add-to-list 'devil-translations '(", a" . "C-, a"))
-  (keymap-global-set "C-, a" #'embark-act)
 
   (add-to-list 'devil-translations '(", 1" . "C-, 1"))
   (keymap-global-set "C-, 1" #'dired-project)
@@ -242,12 +266,6 @@
   :bind
   ("s-." . avy-goto-word-1))
 
-(use-package corfu
-  :custom
-  (corfu-auto t)
-  :init
-  (global-corfu-mode +1))
-
 (use-package yasnippet
   :demand t
   :config
@@ -263,13 +281,6 @@
 (with-eval-after-load 'corfu
   (define-key corfu-map (kbd "TAB") #'yas-expand-or-corfu-complete)
   (define-key corfu-map (kbd "<tab>") #'yas-expand-or-corfu-complete))
-
-(use-package marginalia
-  :init
-  (marginalia-mode))
-
-(use-package embark
-  :ensure t)
 
 (use-package consult
   :init
@@ -291,28 +302,15 @@
       (abort-recursive-edit)))
   :bind
   ("C-o" . consult-buffer)
-  ("C-S-o" . find-file)
-  ("M-g i" . consult-imenu)
-  ("M-g I" . consult-imenu-multi)
-  ("M-s d" . consult-fd)
-  ("M-s c" . consult-locate)
-  ("M-s l" . consult-line)
-  ("M-s L" . consult-line-multi)
-  ("M-s k" . consult-keep-lines)
-  ("M-s u" . consult-focus-lines)
+  ("C-O" . find-file)
+  ("M-V" . consult-yankg-pop)
+  ("C-, l" . consult-imenu)
   (:map vertico-map
         ("C-o" . my/consult-to-project-find-file)))
 
- (use-package embark-consult
-  :ensure t)
-
 (use-package deadgrep
   :bind
-  ("C-S-s" . #'deadgrep))
-
-(use-package zoom
-  :config
-  (zoom-mode +1))
+  ("C-S" . #'deadgrep))
 
 (use-package magit
   :custom
@@ -485,6 +483,8 @@
   :vc ( :url "https://codeberg.org/meow_king/zig-ts-mode"
         :rev :newest)
   :hook (zig-ts-mode . eglot-ensure)
+  :custom
+  (zig-format-on-save t)
   :config
   (font-lock-add-keywords 'zig-ts-mode
    '(("\\<assert\\>" . font-lock-function-name-face)
