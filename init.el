@@ -31,13 +31,6 @@
 
 (setq mode-line-collapse-minor-modes '(not))
 
-(add-to-list 'default-frame-alist '(font . "JetBrains Mono-16"))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
 (blink-cursor-mode -1)
 (delete-selection-mode +1)
 (electric-pair-mode +1)
@@ -134,19 +127,16 @@
   (define-key compilation-mode-map (kbd "C-o") nil))
 
 (use-package vertico
-  :ensure t
   :init
   (vertico-mode))
 
 (use-package orderless
-  :ensure t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles partial-completion))))
   (completion-pcm-leading-wildcard t))
 
 (use-package crux
-  :ensure t
   :bind
   ("C-j" . #'crux-top-join-line)
   ("C-c k" . #'crux-kill-other-buffers)
@@ -159,7 +149,6 @@
   :ensure t)
 
 (use-package rainbow-delimiters
-  :ensure t
   :hook (emacs-lisp-mode . rainbow-delimiters-mode))
 
 (defun my/yank-indent-advice (&rest _args)
@@ -176,7 +165,6 @@
 (advice-add 'yank-pop :after #'my/yank-indent-advice)
 
 (use-package whitespace-cleanup-mode
-  :ensure t
   :custom
   (whitespace-cleanup-mode-preserve-point t)
   (whitespace-cleanup-mode-only-if-initially-clean nil)
@@ -184,7 +172,6 @@
   (global-whitespace-cleanup-mode +1))
 
 (use-package dired-subtree
-  :ensure t
   :after dired
   :custom
   (dired-subtree-use-backgrounds nil)
@@ -195,16 +182,18 @@
   :config)
 
 (use-package dired
-  :config
+  :ensure nil
   :hook (dired-mode . dired-hide-details-mode)
   :bind (:map dired-mode-map
+              ("C-o". nil)
               ("<return>" . dired-find-file-other-window)
               ("S-<return>" . dired-display-file))
   :config
   (defun dired-project ()
     "Open Dired for the current project root in another window."
     (interactive)
-    (dired-other-window (project-root (project-current t)))))
+    (dired-other-window (project-root (project-current t))))
+  (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package devil
   :vc (:url "https://github.com/fbrosda/devil"
@@ -247,23 +236,19 @@
   (global-set-key (kbd "C-, 6") #'visit-init-file))
 
 (use-package hydra
-  :ensure t
   :config)
 
 (use-package avy
-  :ensure t
   :bind
   ("s-." . avy-goto-word-1))
 
 (use-package corfu
-  :ensure t
   :custom
   (corfu-auto t)
   :init
   (global-corfu-mode +1))
 
 (use-package yasnippet
-  :ensure t
   :demand t
   :config
   (yas-global-mode +1))
@@ -280,7 +265,6 @@
   (define-key corfu-map (kbd "<tab>") #'yas-expand-or-corfu-complete))
 
 (use-package marginalia
-  :ensure t
   :init
   (marginalia-mode))
 
@@ -288,7 +272,6 @@
   :ensure t)
 
 (use-package consult
-  :ensure t
   :init
   (defun my/consult-to-project-find-file ()
     "Switch from `consult-buffer` to `project-find-file`, keeping the query."
@@ -324,23 +307,21 @@
   :ensure t)
 
 (use-package deadgrep
-  :ensure t
   :bind
   ("C-S-s" . #'deadgrep))
 
 (use-package zoom
-  :ensure t
   :config
   (zoom-mode +1))
 
 (use-package magit
-  :ensure t
   :custom
   (magit-save-repository-buffers 'dontask)
   (magit-diff-fontify-hunk 'all)
   (magit-diff-specify-hunk-foreground nil)
   (magit-diff-use-indicator-faces t)
   (magit-prefer-remote-upstream t)
+  (magit-diff-visit-prefer-worktree t)
 
   :bind
   (:map magit-hunk-section-map
@@ -370,7 +351,6 @@
   :ensure t)
 
 (use-package diff-hl
-  :ensure t
   :init
   (global-diff-hl-mode)
   :bind
@@ -380,7 +360,6 @@
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
 
 (use-package multiple-cursors
-  :ensure t
   :demand t
   :bind
   ("M-d" . #'mc/mark-next-like-this-word)
@@ -408,20 +387,17 @@
                 (setq my/cursor-before nil)))))
 
 (use-package expand-region
-  :ensure t
   :custom
   (expand-region-contract-fast-key "D")
   :bind
   ("s-d" . #'er/expand-region))
 
 (use-package super-save
-  :ensure t
   :demand t
   :config
   (super-save-mode +1))
 
 (use-package better-jumper
-  :ensure t
   :bind
   ("M-[" . #'better-jumper-jump-backward)
   ("M-]" . #'better-jumper-jump-forward)
@@ -434,13 +410,11 @@
 
 (use-package breadcrumb
   :vc (:url "https://github.com/joaotavora/breadcrumb.git" :rev :newest)
-  :ensure t
   :config
   (setq-default frame-title-format
                 '((:eval (breadcrumb--header-line)))))
 
 (use-package jinx
-  :ensure t
   :hook (emacs-startup . global-jinx-mode)
   :bind
   ("C-e t" . #'jinx-correct)
@@ -585,4 +559,4 @@
 
 (when (file-exists-p custom-file)
   (load custom-file))
-(put 'dired-find-alternate-file 'disabled nil)
+(setq gc-cons-threshold 800000)
