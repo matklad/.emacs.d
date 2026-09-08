@@ -137,7 +137,7 @@
 (use-package corfu
   :init
   (global-corfu-mode +1)
-  :config
+  :custom
   (corfu-auto t))
 
 (use-package isearch
@@ -311,7 +311,7 @@
 
 (use-package deadgrep
   :bind
-  ("C-S" . #'deadgrep))
+  ("C-S-s" . deadgrep))
 
 (use-package magit
   :custom
