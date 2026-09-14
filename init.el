@@ -61,10 +61,10 @@
 
 (keymap-set key-translation-map "ESC" "C-g")
 (keymap-global-set "M-z" #'undo-only)
-(keymap-global-set "M-S-z" #'undo-redo)
+(keymap-global-set "M-Z" #'undo-redo)
 (keymap-global-set "M-v" #'yank)
 (keymap-global-set "M-a" #'mark-whole-buffer)
-(keymap-global-set "C-c x" #'execute-extended-command)
+(keymap-global-set "C-, x" #'execute-extended-command)
 (keymap-global-set "C-x k" #'kill-current-buffer)
 
 (keymap-global-set "M-<left>"  #'move-beginning-of-line)
@@ -137,6 +137,7 @@
   (completion-pcm-leading-wildcard t))
 
 (use-package corfu
+  :hook (markdown-mode . (lambda () (corfu-mode -1)))
   :init
   (global-corfu-mode +1)
   :custom
@@ -230,7 +231,7 @@
             :rev :newest)
   :demand t
   :config
-  (add-to-list 'devil-translations '(", m x" . "C-c x"))
+  (add-to-list 'devil-translations '(", m x" . "C-, x"))
   (add-to-list 'devil-translations '(", ." . "M-."))
   (add-to-list 'devil-translations '(", l" . "C-, l"))
   (add-to-list 'devil-translations '(", >" . "C-x 4 ."))
@@ -305,7 +306,7 @@
   :bind
   ("C-o" . consult-buffer)
   ("C-S-o" . find-file)
-  ("M-S-v" . consult-yankg-pop)
+  ("M-V" . consult-yank-pop)
   ("C-, l" . consult-imenu)
   ("C-s" . consult-line)
   (:map vertico-map
@@ -431,67 +432,70 @@
                '(zig-ts-mode . ("~/bin/zls-0.14.0"))))
 
 
-(defun zig-ts--test-node-p (node)
-  "Return non-nil if NODE is a Zig function declaration."
-  (equal (treesit-node-type node) "test_declaration"))
-
-(defun zig-ts--function-node-p (node)
-  "Return non-nil if NODE is a Zig function declaration."
-  (equal (treesit-node-type node) "function_declaration"))
-
-(defun zig-ts--contains-function-p (node)
-  "Return non-nil if NODE contains a nested function declaration."
-  (seq-some (lambda (child)
-              (or (zig-ts--function-node-p child)
-                  (zig-ts--contains-function-p child)))
-            (treesit-node-children node)))
-
-(defun zig-ts--leaf-function-node-p (node)
-  (and (zig-ts--function-node-p node)
-       (not (zig-ts--contains-function-p node))))
-
-(defun zig-ts--leaf-functions-and-tests (node)
-  "Return leaf function declarations below NODE."
-  (if (or (zig-ts--test-node-p node)
-          (zig-ts--leaf-function-node-p node))
-      (list node)
-
-    (apply #'append
-           (mapcar #'zig-ts--leaf-functions-and-tests
-                   (treesit-node-children node)))))
-
 (defun my/fold-functions ()
   "Fold leaf Zig functions, or unfold everything if anything is folded."
   (interactive)
   (unless (derived-mode-p 'zig-ts-mode)
     (user-error "This command requires zig-ts-mode"))
-  (save-excursion
-    (let ((overlays (overlays-in (point-min) (point-max)))
-          (folded nil))
-      (while (and overlays (not folded))
-        (when (overlay-get (car overlays) 'hs)
-          (setq folded t))
-        (setq overlays (cdr overlays)))
-      (if folded
-          (hs-show-all)
-        (dolist (f
-                 (zig-ts--leaf-functions-and-tests (treesit-buffer-root-node 'zig)))
-          (when-let ((body (treesit-node-child f -1 )))
-            (goto-char (treesit-node-start body))
-            (hs-hide-block)))))))
+  (cl-labels ((test-node-p (node)
+                (equal (treesit-node-type node) "test_declaration"))
+
+              (function-node-p (node)
+                (equal (treesit-node-type node) "function_declaration"))
+
+              (contains-function-p (node)
+                (seq-some (lambda (child)
+                            (or (function-node-p child)
+                                (contains-function-p child)))
+                          (treesit-node-children node)))
+
+              (leaf-function-node-p (node)
+                (and (function-node-p node)
+                     (not (contains-function-p node))))
+
+              (foldables (node)
+                (if (or (test-node-p node)
+                        (leaf-function-node-p node))
+                    (list node)
+
+                  (apply #'append
+                         (mapcar #'foldables
+                                 (treesit-node-children node))))))
+    (save-excursion
+      (let ((overlays (overlays-in (point-min) (point-max)))
+            (folded nil))
+        (while (and overlays (not folded))
+          (when (overlay-get (car overlays) 'hs)
+            (setq folded t))
+          (setq overlays (cdr overlays)))
+        (if folded
+            (hs-show-all)
+          (dolist (f (foldables (treesit-buffer-root-node 'zig)))
+            (when-let ((body (treesit-node-child f -1 )))
+              (goto-char (treesit-node-start body))
+              (hs-hide-block))))))))
 
 (keymap-global-set "C-S-f" #'my/fold-functions)
+
+(defun my/zig-highlight-overrides (beg end)
+  "Overlay-based highlight to stay visible over eglot semantic tokens."
+  (remove-overlays beg end 'my/zig-override t)
+  (save-excursion
+    (goto-char beg)
+    (while (re-search-forward "\\<\\(assert\\|maybe\\|unreachable\\)\\>" end t)
+      (let ((ov (make-overlay (match-beginning 0) (match-end 0))))
+        (overlay-put ov 'my/zig-override t)
+        (overlay-put ov 'face 'font-lock-preprocessor-face)
+        (overlay-put ov 'priority 100)))))
 
 (use-package zig-ts-mode
   :vc ( :url "https://codeberg.org/meow_king/zig-ts-mode"
         :rev :newest)
-  :hook (zig-ts-mode . eglot-ensure)
+  :hook (zig-ts-mode . (lambda ()
+                         (eglot-ensure)
+                         (jit-lock-register #'my/zig-highlight-overrides)))
   :custom
-  (zig-format-on-save t)
-  :config
-  (font-lock-add-keywords 'zig-ts-mode
-   '(("\\<assert\\>" . font-lock-function-name-face)
-     ("\\<unreachable\\>" . font-lock-function-name-face))))
+  (zig-format-on-save t))
 
 (use-package rust-mode
   :ensure t)
