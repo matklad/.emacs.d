@@ -81,7 +81,6 @@
 
 (keymap-global-set "M-/" #'comment-line)
 (keymap-global-set "s-/" #'hippie-expand)
-(keymap-global-set "C-<tab>" #'other-window)
 (keymap-global-set "s-SPC" #'cycle-spacing)
 
 (keymap-global-unset "C-w")
@@ -133,11 +132,14 @@
 (use-package orderless
   :custom
   (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-overrides
+   '((file (styles partial-completion))
+     (project-file (styles partial-completion))))
   (completion-pcm-leading-wildcard t))
 
 (use-package corfu
   :hook (markdown-mode . (lambda () (corfu-mode -1)))
+  :hook (text-mode . (lambda () (corfu-mode -1)))
   :init
   (global-corfu-mode +1)
   :custom
@@ -165,13 +167,21 @@
   :config
   (define-key compilation-mode-map (kbd "C-o") nil))
 
+(defun kill-other-buffers-and-windows ()
+  (interactive)
+  (seq-each
+   #'kill-buffer
+   (delete (current-buffer) (seq-filter #'buffer-file-name (buffer-list))))
+  (delete-other-windows))
+
 (use-package crux
   :bind
   ("C-j" . #'crux-top-join-line)
-  ("C-c k" . #'crux-kill-other-buffers)
+  ("C-c k" . #'kill-other-buffers-and-windows)
   ("M-<return>" . #'crux-smart-open-line)
   ("M-<backspace>" . #'crux-kill-whole-line)
   ("C-k" . #'crux-kill-whole-line)
+  ("C-<tab>" . #'crux-other-window-or-switch-buffer)
   ("<remap> <move-beginning-of-line>" . #'crux-move-beginning-of-line))
 
 (use-package zop-to-char
@@ -310,11 +320,13 @@
   ("C-, l" . consult-imenu)
   ("C-s" . consult-line)
   (:map vertico-map
-        ("C-o" . my/consult-to-project-find-file)))
+        ("C-o" . #'my/consult-to-project-find-file)))
 
 (use-package deadgrep
   :bind
-  ("C-S-s" . deadgrep))
+  ("C-S-s" . deadgrep)
+  (:map deadgrep-mode-map
+        ("RET" . #'deadgrep-visit-result-other-window)))
 
 (use-package magit
   :custom
@@ -497,15 +509,15 @@
   :custom
   (zig-format-on-save t))
 
-(use-package rust-mode
-  :ensure t)
+(use-package rust-mode)
 
 (use-package markdown-mode
-  :ensure t
   :custom
   (markdown-fontify-code-blocks-natively t)
   :config
   (add-to-list 'auto-mode-alist '("\\.dj\\'" . markdown-mode)))
+
+(use-package go-mode)
 
 (use-package persistent-scratch
   :ensure t
