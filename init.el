@@ -336,6 +336,7 @@
   (magit-diff-use-indicator-faces t)
   (magit-prefer-remote-upstream t)
   (magit-diff-visit-prefer-worktree t)
+  (magit-list-refs-sortby "-committerdate")
 
   :bind
   (:map magit-hunk-section-map
